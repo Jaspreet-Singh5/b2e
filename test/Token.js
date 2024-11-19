@@ -136,6 +136,7 @@ describe('Token', () => {
                     value
                 } = approvalEvent.args;
                 
+                expect(approvalEvent).to.not.undefined;
                 expect(owner).to.equal(deployer.address);
                 expect(spender).to.equal(exchange.address);
                 expect(value).to.equal(amount);
@@ -153,6 +154,59 @@ describe('Token', () => {
                     )).to.be.reverted;
             })
         });
-    })
+    });
+
+    describe('Delegated token transfers', () => {
+        let transaction, amount, result;
+
+        beforeEach(async () => {
+        });
+        
+        describe('Success', () => {
+            beforeEach(async () => {
+                amount = tokens(100);
+                transaction = await token.connect(deployer).approve(exchange.address, amount) 
+                result = await transaction.wait();
+
+                transaction = await token.connect(exchange).transferFrom(deployer.address, receiver.address, amount);
+                result = await transaction.wait();
+            });
+
+            it('transfers amount of tokens from one address to another', async () => {
+                expect(await token.balanceOf(receiver.address)).to.equal(amount);
+                expect(await token.balanceOf(deployer.address)).to.equal(tokens(999900));
+            });
+
+            it('emits a transfer event', () => {
+                const transferEvent = result.events.find(e => e.event === 'Transfer');
+                expect(transferEvent).to.not.undefined;
+    
+                const args = transferEvent?.args;
+                expect(args.from).to.equal(deployer.address);
+                expect(args.to).to.equal(receiver.address);
+                expect(args.value.toString()).to.equal(amount.toString());
+            });
+
+            it('resets allowance', async () => {
+                expect(await token.allowance(deployer.address, exchange.address)).to.equal(0);
+            });
+        });
+
+        describe('Failure', () => {
+            it('rejects unauthorized spenders', async () => {
+                await expect(token.connect(exchange).transferFrom(deployer.address, receiver.address, tokens(100))).to.be.reverted;
+            });
+
+            it('rejects trasnfer of more than allowed tokens', async () => {
+                let transaction, amount, result;
+                
+                amount = tokens(100);
+                transaction = await token.connect(deployer).approve(exchange.address, amount);
+                result = await transaction.wait();
+
+                await expect(token.connect(exchange).transferFrom(deployer.address, receiver.address, tokens(200))).to.be.reverted;
+            })
+        })
+    });
 
 })
