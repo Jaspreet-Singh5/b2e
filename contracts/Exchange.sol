@@ -10,6 +10,7 @@ contract Exchange {
     mapping (address => mapping(address => uint256)) public tokens;
     mapping(uint256 => _Order) public orders;
     uint256 public orderCount;
+    mapping(uint256 => bool) public ordersCancelled;
 
     event Deposit(
         address indexed token,
@@ -33,6 +34,16 @@ contract Exchange {
         address indexed tokenGive, // address of the token they give
         uint256 valueGive, // value of the token they give
         uint256 timestamp // When order was created
+    );
+
+    event Cancel (
+        uint256 id, // unique identifier for order
+        address indexed user, // User who made order
+        address indexed tokenGet, // address of the token they receive
+        uint256 valueGet, // value of the token they receive
+        address indexed tokenGive, // address of the token they give
+        uint256 valueGive, // value of the token they give
+        uint256 timestamp // When order was cancelled
     );
 
     // model order
@@ -122,6 +133,30 @@ contract Exchange {
             _tokenGive, // address of the token they give
             _valueGive, // value of the token they give
             block.timestamp // When order was created
+        );      
+    }
+
+    function cancelOrder(uint256 _id) public {
+        // fetch order
+        _Order storage _order = orders[_id];
+
+        // order should exist
+        require(_order.id != 0);
+        // allow cancelling orders created via same user only
+        require(_order.user == msg.sender);
+
+        // cancel the order
+        ordersCancelled[_id] = true;
+
+        // emit event
+        emit Cancel(
+            _order.id, // id
+            msg.sender, // user
+            _order.tokenGet, // address of the token they receive
+            _order.valueGet, // value of the token they receive
+            _order.tokenGive, // address of the token they give
+            _order.valueGive, // value of the token they give
+            block.timestamp // When order was cancelled`
         );      
     }
 }
