@@ -66,6 +66,7 @@ contract Token {
         returns (bool success)
     {
         require(_spender != address(0));
+        require(balanceOf[msg.sender] >= _value);
         
         // Allows _spender to withdraw from your account multiple times, 
         // up to the _value amount. If this function is called again it overwrites the current allowance with _value.            
