@@ -1,6 +1,4 @@
 const { buildModule } = require("@nomicfoundation/hardhat-ignition/modules");
-const { ethers } = require("hardhat");
-// require("@nomicfoundation/hardhat-ignition-ethers");
  
 module.exports = buildModule("DeployModule", (m) => {
   const BKG = m.contract("Token", [
