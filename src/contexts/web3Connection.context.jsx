@@ -1,10 +1,10 @@
-import { createContext, useRef } from 'react';
+import { createContext, useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 
 export const Web3ConnectionContext = createContext({});
 
 export const Web3ConnectionProvicer = ({ children }) => {   
-    const web3ConnectionRef = useRef(null);
+    const [ web3Connection, setWeb3Connection ] = useState(null);
 
     const loadProvider = () => {
         // connect ethers to blockchain
@@ -13,12 +13,9 @@ export const Web3ConnectionProvicer = ({ children }) => {
         return provider;
     }
 
-    if (!web3ConnectionRef.current) {
-        setTimeout(() => {
+    useEffect(() => {
+        setWeb3Connection(loadProvider());
+    }, [window.ethereum]);
 
-            web3ConnectionRef.current = loadProvider();
-        }, 2000);
-    }
-
-    return <Web3ConnectionContext.Provider value={web3ConnectionRef}>{children}</Web3ConnectionContext.Provider>   
+    return <Web3ConnectionContext.Provider value={web3Connection}>{children}</Web3ConnectionContext.Provider>   
 }

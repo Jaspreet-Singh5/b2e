@@ -22,7 +22,7 @@ function App() {
 
   useEffect(() => {
     loadBlockchainData();
-  }, [provider, token]);
+  }, [ token ]);
  
   return (
     <div>

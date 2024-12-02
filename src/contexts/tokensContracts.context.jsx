@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { createContext, useRef, useEffect } from 'react'; 
+import { createContext, useEffect, useState } from 'react'; 
 import { useDispatch } from 'react-redux';
 import config from '../config.json';
 import TOKEN_ABI from '../abis/Token.json';
@@ -11,11 +11,13 @@ export const TokensContractsContext = createContext({
 });
 
 export const TokensContractsProvider = ({ children }) => {
-    const tokenRef = useRef(null);
+    const [ token, setToken ] = useState(null);
     const provider = useWeb3Connection();
     const dispatch = useDispatch();
 
-    const loadToken = async (address, abi, provider) => {
+    const loadToken = (address, abi, provider) => {
+        if (!address || !abi || !provider) return;
+
         const token = new ethers.Contract(address, abi, provider);
 
         dispatch({
@@ -26,15 +28,13 @@ export const TokensContractsProvider = ({ children }) => {
     }
     
     const fetchToken = async () => {
-        if (!tokenRef.current && provider) {
-            const chainId = await loadNetwork(provider, dispatch);
-            tokenRef.current = await loadToken(config[chainId].BKG.address, TOKEN_ABI, provider);
-        }
+        const chainId = await loadNetwork(provider, dispatch);
+        setToken(loadToken(config[chainId]?.BKG.address, TOKEN_ABI, provider));
     }
 
     useEffect(() => {
         fetchToken();
     }, [provider]);
 
-    return <TokensContractsContext.Provider value={tokenRef}>{children}</TokensContractsContext.Provider>
+    return <TokensContractsContext.Provider value={token}>{children}</TokensContractsContext.Provider>
 }
