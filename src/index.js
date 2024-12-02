@@ -2,11 +2,22 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
+import './App.css';
+import { Provider } from 'react-redux';
+import store from './store/store';
+import { Web3ConnectionProvicer } from './contexts/web3Connection.context';
+import { TokensContractsProvider } from './contexts/tokensContracts.context';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <Web3ConnectionProvicer>
+        <TokensContractsProvider>
+          <App />
+        </TokensContractsProvider>
+      </Web3ConnectionProvicer>
+    </Provider>
   </React.StrictMode>
 );
 
