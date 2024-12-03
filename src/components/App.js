@@ -7,14 +7,15 @@ import { useTokensContracts } from '../hooks/useTokensContracts';
 
 function App() {
   const dispatch = useDispatch();
-  // connect ethers to blockchain
-  const provider = useWeb3Connection();
-  const token = useTokensContracts();
+  const tokens = useTokensContracts();
 
   const loadBlockchainData = async () => {
     try {
-      const account = await loadAccount(dispatch);    
-      const symbol = await loadSymbol(token, dispatch);
+      await loadAccount(dispatch);    
+
+      tokens?.map(async (token) => {
+        await loadSymbol(token, dispatch);
+      });
     } catch (err) {
       console.log(err);
     }
@@ -22,7 +23,7 @@ function App() {
 
   useEffect(() => {
     loadBlockchainData();
-  }, [ token ]);
+  }, [ tokens ]);
  
   return (
     <div>

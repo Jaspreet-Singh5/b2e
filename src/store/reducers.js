@@ -15,9 +15,14 @@ export const provider = (state = {}, action) => {
     }
 }
 
-export const tokens = (state = { loaded: false }, action) => {
+const DEFAULT_TOKENS_STATE = { 
+    loaded: false, 
+    symbols: [] 
+};
+
+export const tokens = (state = DEFAULT_TOKENS_STATE, action) => {
     switch (action.type) {
-        case 'TOKEN_LOADED':
+        case 'TOKENS_LOADED':
             return {
                 ...state,
                 loaded: true
@@ -25,7 +30,10 @@ export const tokens = (state = { loaded: false }, action) => {
         case 'SYMBOL_LOADED':
             return {
                 ...state,
-                symbol: action.symbol
+                symbols: [
+                    ...state.symbols,
+                    action.symbol
+                ]
             }
         default:
             return state;

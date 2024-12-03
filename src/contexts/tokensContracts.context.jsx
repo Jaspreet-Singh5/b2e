@@ -11,30 +11,44 @@ export const TokensContractsContext = createContext({
 });
 
 export const TokensContractsProvider = ({ children }) => {
-    const [ token, setToken ] = useState(null);
+    const [ tokens, setTokens ] = useState([]);
     const provider = useWeb3Connection();
     const dispatch = useDispatch();
 
-    const loadToken = (address, abi, provider) => {
-        if (!address || !abi || !provider) return;
+    const loadTokens = (addresses, abi, provider) => {
+        if (!addresses?.length > 0 || !abi || !provider) return;
 
-        const token = new ethers.Contract(address, abi, provider);
-
-        dispatch({
-            type: 'TOKEN_LOADED'
+        const tokens = addresses.map((address) => {
+            const token = new ethers.Contract(address, abi, provider);
+            return token;
         });
 
-        return token
+        dispatch({
+            type: 'TOKENS_LOADED'
+        });
+
+        return tokens;
     }
     
-    const fetchToken = async () => {
+    const fetchTokens = async () => {
         const chainId = await loadNetwork(provider, dispatch);
-        setToken(loadToken(config[chainId]?.BKG.address, TOKEN_ABI, provider));
+        const addresses = [ 
+            config[chainId]?.BKG?.address,
+            config[chainId]?.mETH?.address,
+            config[chainId]?.mSOL?.address,
+            config[chainId]?.mUSDT?.address,
+        ];
+        const loadedTokens = loadTokens(addresses, TOKEN_ABI, provider) ?? [];
+
+        setTokens(prevTokens => [
+            ...prevTokens,
+            ...loadedTokens
+        ]);
     }
 
     useEffect(() => {
-        fetchToken();
-    }, [provider]);
+        fetchTokens();
+    }, [ provider ]);
 
-    return <TokensContractsContext.Provider value={token}>{children}</TokensContractsContext.Provider>
+    return <TokensContractsContext.Provider value={tokens}>{children}</TokensContractsContext.Provider>
 }

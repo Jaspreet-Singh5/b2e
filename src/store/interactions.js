@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 
 export const loadNetwork = async (provider, dispatch) => {
     if (!provider) return;
-    
+
     const { chainId } = await provider.getNetwork();
 
     dispatch({
@@ -26,6 +26,8 @@ export const loadAccount = async (dispatch) => {
 }
 
 export const loadSymbol = async (token, dispatch) => {
+    if (!token) return;
+    
     const symbol = await token.symbol();
 
     dispatch({
