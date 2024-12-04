@@ -2,11 +2,12 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
 
 // Import reducers
-import { provider, tokens } from './reducers';
+import { exchange, provider, tokens } from './reducers';
 
 const rootReducer = combineReducers({
     provider,
-    tokens
+    tokens,
+    exchange
 });
 
 const initialState = {};

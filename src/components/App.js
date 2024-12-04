@@ -4,14 +4,18 @@ import { useDispatch } from 'react-redux';
 import { loadAccount, loadSymbol } from '../store/interactions';
 import { useWeb3Connection } from '../hooks/useWeb3Connection';
 import { useTokensContracts } from '../hooks/useTokensContracts';
+import { useExchangeContract } from '../hooks/useExchangeContract';
 
 function App() {
   const dispatch = useDispatch();
   const tokens = useTokensContracts();
+  // connect to blockchain
+  const provider = useWeb3Connection();
 
   const loadBlockchainData = async () => {
     try {
-      await loadAccount(dispatch);    
+      // fetch current account and balance
+      await loadAccount(dispatch, provider);    
 
       tokens?.map(async (token) => {
         await loadSymbol(token, dispatch);

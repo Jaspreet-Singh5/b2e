@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import store from './store/store';
 import { Web3ConnectionProvicer } from './contexts/web3Connection.context';
 import { TokensContractsProvider } from './contexts/tokensContracts.context';
+import { ExchangeContractProvider } from './contexts/exchangeContract.context';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -14,7 +15,9 @@ root.render(
     <Provider store={store}>
       <Web3ConnectionProvicer>
         <TokensContractsProvider>
-          <App />
+          <ExchangeContractProvider>
+            <App />
+          </ExchangeContractProvider>
         </TokensContractsProvider>
       </Web3ConnectionProvicer>
     </Provider>
