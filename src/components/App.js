@@ -1,66 +1,68 @@
-
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { loadAccount, loadSymbol } from '../store/interactions';
 import { useWeb3Connection } from '../hooks/useWeb3Connection';
 import { useTokensContracts } from '../hooks/useTokensContracts';
-import { useExchangeContract } from '../hooks/useExchangeContract';
+import Navbar from './Navbar';
 
 function App() {
-  const dispatch = useDispatch();
-  const tokens = useTokensContracts();
-  // connect to blockchain
-  const provider = useWeb3Connection();
+	const dispatch = useDispatch();
+	const tokens = useTokensContracts();
+	// connect to blockchain
+	const provider = useWeb3Connection();
 
-  const loadBlockchainData = async () => {
-    try {
-      // fetch current account and balance
-      await loadAccount(dispatch, provider);    
+	const loadBlockchainData = async () => {
+		try {
+			// fetch current account and balance when changed
+			window.ethereum.on('accountsChanged', async () => {
+				await loadAccount(dispatch, provider);    
+			});
 
-      tokens?.map(async (token) => {
-        await loadSymbol(token, dispatch);
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  }
+			tokens?.map(async (token) => {
+				await loadSymbol(token, dispatch);
+			});
+		} catch (err) {
+			console.log(err);
+		}
+  	}
 
-  useEffect(() => {
-    loadBlockchainData();
-  }, [ tokens ]);
+	useEffect(() => {
+		loadBlockchainData();
+  	}, [ tokens, provider ]);
  
-  return (
-    <div>
+  	return (
+		<div>
 
-      {/* Navbar */}
+			{/* Navbar */}
+			<Navbar />
 
-      <main className='exchange grid'>
-        <section className='exchange__section--left grid'>
+			<main className='exchange grid'>
+				<section className='exchange__section--left grid'>
 
-          {/* Markets */}
+				{/* Markets */}
 
-          {/* Balance */}
+				{/* Balance */}
 
-          {/* Order */}
+				{/* Order */}
 
-        </section>
-        <section className='exchange__section--right grid'>
+				</section>
+				<section className='exchange__section--right grid'>
 
-          {/* PriceChart */}
+				{/* PriceChart */}
 
-          {/* Transactions */}
+				{/* Transactions */}
 
-          {/* Trades */}
+				{/* Trades */}
 
-          {/* OrderBook */}
+				{/* OrderBook */}
 
-        </section>
-      </main>
+				</section>
+			</main>
 
-      {/* Alert */}
+			{/* Alert */}
 
-    </div>
-  );
+		</div>
+	);
 }
 
 export default App;
