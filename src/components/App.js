@@ -27,6 +27,10 @@ function App() {
   	}
 
 	useEffect(() => {
+		window.ethereum.on('chainChanged', () => {
+			window.location.reload();
+		});
+
 		loadBlockchainData();
   	}, [ tokens, provider ]);
  

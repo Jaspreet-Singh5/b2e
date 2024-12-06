@@ -32,12 +32,13 @@ export const TokensContractsProvider = ({ children }) => {
     
     const fetchTokens = async () => {
         const chainId = await loadNetwork(provider, dispatch);
+        
         const addresses = [ 
             config[chainId]?.BKG?.address,
             config[chainId]?.mETH?.address,
             config[chainId]?.mSOL?.address,
             config[chainId]?.mUSDT?.address,
-        ];
+        ].filter(Boolean);
         const loadedTokens = loadTokens(addresses, TOKEN_ABI, provider) ?? [];
 
         setTokens(prevTokens => [

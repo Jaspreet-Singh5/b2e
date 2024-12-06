@@ -15,7 +15,7 @@ export const Web3ConnectionProvicer = ({ children }) => {
 
     useEffect(() => {
         setWeb3Connection(loadProvider());
-    }, [window.ethereum]);
+    }, [ window.ethereum ]);
 
     return <Web3ConnectionContext.Provider value={web3Connection}>{children}</Web3ConnectionContext.Provider>   
 }

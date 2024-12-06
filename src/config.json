@@ -14,6 +14,10 @@
         },
         "mUSDT": {
             "address": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"
-        }
+        },
+        "explorerURL": "#"
+    },
+    "11155111": {
+        "explorerURL": "https://sepolia.etherscan.io"
     }
 }
