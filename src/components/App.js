@@ -2,12 +2,11 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { loadAccount, loadSymbol } from '../store/interactions';
 import { useWeb3Connection } from '../hooks/useWeb3Connection';
-import { useTokensContracts } from '../hooks/useTokensContracts';
 import Navbar from './Navbar';
+import Markets from './Markets';
 
 function App() {
 	const dispatch = useDispatch();
-	const tokens = useTokensContracts();
 	// connect to blockchain
 	const provider = useWeb3Connection();
 
@@ -16,10 +15,6 @@ function App() {
 			// fetch current account and balance when changed
 			window.ethereum.on('accountsChanged', async () => {
 				await loadAccount(dispatch, provider);    
-			});
-
-			tokens?.map(async (token) => {
-				await loadSymbol(token, dispatch);
 			});
 		} catch (err) {
 			console.log(err);
@@ -32,7 +27,7 @@ function App() {
 		});
 
 		loadBlockchainData();
-  	}, [ tokens, provider ]);
+  	}, [ provider ]);
  
   	return (
 		<div>
@@ -44,6 +39,7 @@ function App() {
 				<section className='exchange__section--left grid'>
 
 				{/* Markets */}
+				<Markets />
 
 				{/* Balance */}
 

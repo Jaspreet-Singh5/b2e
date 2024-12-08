@@ -20,16 +20,16 @@ async function main() {
   console.log(`Using chainId: ${chainId}`);
 
   // Fetch deployed tokens
-  const BKG = await ethers.getContractAt('Token', config[chainId].BKG.address);
+  const BKG = await ethers.getContractAt('Token', config[chainId]?.tokens.BKG.address);
   console.log(`BKG Token fetched: ${BKG.address}\n`);
 
-  const mETH = await ethers.getContractAt('Token', config[chainId].mETH.address);
+  const mETH = await ethers.getContractAt('Token', config[chainId]?.tokens.mETH.address);
   console.log(`mETH Token fetched: ${mETH.address}\n`);
 
-  const mSOL = await ethers.getContractAt('Token', config[chainId].mSOL.address);
+  const mSOL = await ethers.getContractAt('Token', config[chainId]?.tokens.mSOL.address);
   console.log(`mSOL Token fetched: ${mSOL.address}\n`);
 
-  const mUSDT = await ethers.getContractAt('Token', config[chainId].mUSDT.address);
+  const mUSDT = await ethers.getContractAt('Token', config[chainId]?.tokens.mUSDT.address);
   console.log(`mUSDT Token fetched: ${mUSDT.address}\n`);
 
   // Fetch the deployed exchange
