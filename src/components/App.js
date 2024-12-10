@@ -4,6 +4,7 @@ import { loadAccount, loadSymbol } from '../store/interactions';
 import { useWeb3Connection } from '../hooks/useWeb3Connection';
 import Navbar from './Navbar';
 import Markets from './Markets';
+import Balance from './Balance';
 
 function App() {
 	const dispatch = useDispatch();
@@ -42,6 +43,7 @@ function App() {
 				<Markets />
 
 				{/* Balance */}
+				<Balance />
 
 				{/* Order */}
 
