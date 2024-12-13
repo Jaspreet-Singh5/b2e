@@ -1,15 +1,17 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { loadAccount, loadSymbol } from '../store/interactions';
+import { loadAccount, loadSymbol, subscribeToEvents } from '../store/interactions';
 import { useWeb3Connection } from '../hooks/useWeb3Connection';
 import Navbar from './Navbar';
 import Markets from './Markets';
 import Balance from './Balance';
+import { useExchangeContract } from '../hooks/useExchangeContract';
 
 function App() {
 	const dispatch = useDispatch();
 	// connect to blockchain
 	const provider = useWeb3Connection();
+	const exchange = useExchangeContract();
 
 	const loadBlockchainData = async () => {
 		try {
@@ -27,8 +29,10 @@ function App() {
 			window.location.reload();
 		});
 
+		console.log(exchange);
+		subscribeToEvents(exchange, dispatch);
 		loadBlockchainData();
-  	}, [ provider ]);
+  	}, [ provider, exchange ]);
  
   	return (
 		<div>

@@ -4,7 +4,7 @@ import { ethers } from 'ethers';
 export const Web3ConnectionContext = createContext({});
 
 export const Web3ConnectionProvicer = ({ children }) => {   
-    const [ web3Connection, setWeb3Connection ] = useState(null);
+    const [ web3Connection, setWeb3Connection ] = useState();
 
     const loadProvider = () => {
         // connect ethers to blockchain

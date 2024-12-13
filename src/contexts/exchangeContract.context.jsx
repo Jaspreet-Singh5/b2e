@@ -11,7 +11,7 @@ export const ExchangeContractContext = createContext({
 });
 
 export const ExchangeContractProvider = ({ children }) => {
-    const [ exchange, setExchange ] = useState([]);
+    const [ exchange, setExchange ] = useState();
     const provider = useWeb3Connection();
     const dispatch = useDispatch();
 
@@ -30,7 +30,7 @@ export const ExchangeContractProvider = ({ children }) => {
     const fetchExchange = async () => {
         const chainId = await loadNetwork(provider, dispatch);
         const address = config[chainId]?.exchange?.address;
-        const loadedExchange = loadExchange(address, Exchange_ABI, provider) ?? [];
+        const loadedExchange = loadExchange(address, Exchange_ABI, provider);
 
         setExchange(loadedExchange);
     }

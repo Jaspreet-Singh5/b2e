@@ -25,7 +25,8 @@ export const provider = (state = {}, action) => {
 
 const DEFAULT_TOKENS_STATE = { 
     loaded: false, 
-    symbols: [] 
+    symbols: [],
+    balances: [], 
 };
 
 export const tokens = (state = DEFAULT_TOKENS_STATE, action) => {
@@ -36,24 +37,96 @@ export const tokens = (state = DEFAULT_TOKENS_STATE, action) => {
                 loaded: true,
                 symbols: [ action.symbol ]
             }
+
+        case 'TOKEN1_BALANCE_LOADED':
+            return {
+                ...state,
+                balances: [action.balance]
+            }
+
         case 'TOKEN2_LOADED':
             return {
                 ...state,
                 loaded: true,
                 symbols: [ ...state.symbols, action.symbol]
             }
+        
+        case 'TOKEN2_BALANCE_LOADED':
+            return {
+                ...state,
+                balances: [...state.balances, action.balance]
+            }
+
         default:
             return state;
     }
 }
 
-export const exchange = (state = { loaded: false }, action) => {
+const DEFAULT_EXCHANGE_STATE = { 
+    loaded: false, 
+    balances: [], 
+    events: [] 
+};
+
+export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
     switch (action.type) {
         case 'EXCHANGE_LOADED':
             return {
                 ...state,
                 loaded: true
             }
+
+        // --------------------------------------
+        // BALANCE CASES
+        case 'EXCHANGE_TOKEN1_BALANCE_LOADED':
+            return {
+                ...state,
+                balances: [action.balance]
+            }
+
+        case 'EXCHANGE_TOKEN2_BALANCE_LOADED':
+            return {
+                ...state,
+                balances: [...state.balances, action.balance]
+            }
+        
+        // -------------------------------
+        // TRANSFER CASES (DEPOSIT & WITHDRAWS)
+        case 'TRANSFER_REQUEST':
+            return {
+                ...state,
+                transaction: {
+                    isPending: true,
+                    isSuccessful: false,
+                    transactionType: 'TRANSFER'
+                },
+                transferInProgress: true
+            }
+
+        case 'TRANSFER_SUCCESS':
+            return {
+                ...state,
+                transaction: {
+                    isPending: false,
+                    isSuccessful: true,
+                    transactionType: 'TRANSFER'
+                },
+                transferInProgress: false,
+                events: [ ...state.events, action.event ]
+            }
+
+        case 'TRANSFER_FAIL':
+            return {
+                ...state,
+                transaction: {
+                    isPending: false,
+                    isSuccessful: false,
+                    transactionType: 'TRANSFER',
+                    isError: true
+                },
+                transferInProgress: false,
+            }
+
         default:
             return state;
     }
