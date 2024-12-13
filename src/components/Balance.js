@@ -20,10 +20,13 @@ const Balance = () => {
     const dispatch = useDispatch();
 
     const [ token1TransferAmount, setToken1TransferAmount ] = useState(0);
+    const [ token2TransferAmount, setToken2TransferAmount ] = useState(0);
     
     const amountHandler = (e, token) => {
         if (token.address === tokens[0].address) {
-            setToken1TransferAmount(+e.target.value);
+          setToken1TransferAmount(+e.target.value);
+        } else {
+          setToken2TransferAmount(+e.target.value);
         }
     }
 
@@ -33,6 +36,9 @@ const Balance = () => {
         if (token.address === tokens[0].address) {
             await transferTokens(provider, 'DEPOSIT', token, token1TransferAmount, exchange, dispatch);
             setToken1TransferAmount(0);
+        } else {
+          await transferTokens(provider, 'DEPOSIT', token, token2TransferAmount, exchange, dispatch);
+          setToken2TransferAmount(0);
         }
     }
 
@@ -96,15 +102,38 @@ const Balance = () => {
   
         <div className='exchange__transfers--form'>
           <div className='flex-between'>
-  
+            <p>
+              <small>Token</small>
+              <br />
+              <img src={`/assets/${config[chainId]?.tokens[symbols?.[1]]?.logo}`} alt='Token Logo' />
+              {symbols?.[1]}
+            </p>
+
+            <p>
+                <small>Wallet</small>
+                <br />
+                { Number(tokenBalances?.[1] || '0').toFixed(2) }
+            </p>
+
+            <p>
+                <small>Exchange</small>
+                <br />
+                { Number(exchangeBalances?.[1] || '0').toFixed(2) }
+            </p>
           </div>
   
-          <form>
-            <label htmlFor="token2"></label>
-            <input type="text" id='token2' placeholder='0.0000'/>
+          <form onSubmit={(e) => depositHandler(e, tokens[1])}>
+            <label htmlFor="token2">{symbols?.[1]} Amount</label>
+            <input 
+                type="number" 
+                id='token2' 
+                placeholder='0.0000'
+                onChange={(e) => amountHandler(e, tokens[1])}
+                value={token2TransferAmount === 0 ? '' : token2TransferAmount}
+            />
   
             <button className='button' type='submit'>
-              <span></span>
+              <span>Deposit</span>
             </button>
           </form>
         </div>
