@@ -3,10 +3,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import config from '../config.json';
 import { loadBalances, transferTokens } from '../store/interactions';
 import { useTokensContracts } from '../hooks/useTokensContracts';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useExchangeContract } from '../hooks/useExchangeContract';
 import { useWeb3Connection } from '../hooks/useWeb3Connection';
-import { ethers } from 'ethers';
+
+const TransferType = {
+  DEPOSIT: 'DEPOSIT',
+  WITHDRAW: 'WITHDRAW'  
+};
 
 const Balance = () => {
     const { symbols, balances: tokenBalances } = useSelector(state => state.tokens);
@@ -21,6 +25,10 @@ const Balance = () => {
 
     const [ token1TransferAmount, setToken1TransferAmount ] = useState(0);
     const [ token2TransferAmount, setToken2TransferAmount ] = useState(0);
+    const [ transferType, setTransferType ] = useState(TransferType.DEPOSIT);
+
+    const depositRef = useRef(null);
+    const withdrawRef = useRef(null);
     
     const amountHandler = (e, token) => {
         if (token.address === tokens[0].address) {
@@ -42,6 +50,22 @@ const Balance = () => {
         }
     }
 
+    const tabHandler = (e) => {
+      const activeClassName = 'tab--active';
+      
+      if (e.target === depositRef.current) {
+        depositRef.current.className = `tab ${activeClassName}`;
+        withdrawRef.current.className = `tab`;
+
+        setTransferType(TransferType.DEPOSIT);
+      } else {
+        withdrawRef.current.className = `tab ${activeClassName}`;
+        depositRef.current.className = `tab`;
+
+        setTransferType(TransferType.WITHDRAW);
+      }
+    }
+
     useEffect(() => {
         loadBalances(tokens, exchange, account,  dispatch);
     }, [ tokens, exchange, account, transferInProgress ]);
@@ -51,8 +75,16 @@ const Balance = () => {
         <div className='component__header flex-between'>
           <h2>Balance</h2>
           <div className='tabs'>
-            <button className='tab tab--active'>Deposit</button>
-            <button className='tab'>Withdraw</button>
+            <button 
+              ref={depositRef}
+              className='tab tab--active'
+              onClick={(e) => tabHandler(e)}
+            >Deposit</button>
+            <button
+              ref={withdrawRef} 
+              className='tab'
+              onClick={(e) => tabHandler(e)}
+            >Withdraw</button>
           </div>
         </div>
   
@@ -91,7 +123,7 @@ const Balance = () => {
             />
   
             <button className='button' type='submit'>
-              <span>Deposit</span>
+              <span>{transferType}</span>
             </button>
           </form>
         </div>
@@ -133,7 +165,7 @@ const Balance = () => {
             />
   
             <button className='button' type='submit'>
-              <span>Deposit</span>
+              <span>{transferType}</span>
             </button>
           </form>
         </div>
