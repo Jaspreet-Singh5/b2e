@@ -6,11 +6,7 @@ import { useTokensContracts } from '../hooks/useTokensContracts';
 import { useEffect, useState, useRef } from 'react';
 import { useExchangeContract } from '../hooks/useExchangeContract';
 import { useWeb3Connection } from '../hooks/useWeb3Connection';
-
-const TransferType = {
-  DEPOSIT: 'DEPOSIT',
-  WITHDRAW: 'WITHDRAW'  
-};
+import { TransferType } from '../enums/transferType';
 
 const Balance = () => {
     const { symbols, balances: tokenBalances } = useSelector(state => state.tokens);
@@ -38,14 +34,14 @@ const Balance = () => {
         }
     }
 
-    const depositHandler = async (e, token) => {
+    const transferHandler = async (e, token) => {
         e.preventDefault();
 
         if (token.address === tokens[0].address) {
-            await transferTokens(provider, 'DEPOSIT', token, token1TransferAmount, exchange, dispatch);
+            await transferTokens(provider, transferType, token, token1TransferAmount, exchange, dispatch);
             setToken1TransferAmount(0);
         } else {
-          await transferTokens(provider, 'DEPOSIT', token, token2TransferAmount, exchange, dispatch);
+          await transferTokens(provider, transferType, token, token2TransferAmount, exchange, dispatch);
           setToken2TransferAmount(0);
         }
     }
@@ -112,7 +108,7 @@ const Balance = () => {
             </p>
           </div>
   
-          <form onSubmit={(e) => depositHandler(e, tokens[0])}>
+          <form onSubmit={(e) => transferHandler(e, tokens[0])}>
             <label htmlFor="token1">{symbols?.[0]} Amount</label>
             <input 
                 type="number" 
@@ -154,7 +150,7 @@ const Balance = () => {
             </p>
           </div>
   
-          <form onSubmit={(e) => depositHandler(e, tokens[1])}>
+          <form onSubmit={(e) => transferHandler(e, tokens[1])}>
             <label htmlFor="token2">{symbols?.[1]} Amount</label>
             <input 
                 type="number" 

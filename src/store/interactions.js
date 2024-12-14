@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
 import TOKEN_ABI from '../abis/Token.json';
+import { TransferType } from "../enums/transferType";
 
 export const loadNetwork = async (provider, dispatch) => {
     if (!provider) return;
@@ -107,13 +108,21 @@ export const transferTokens = async (provider, transferType, token, amount, exch
         const amountToTransfer = ethers.utils.parseEther(amount.toString());
         const signer = provider.getSigner();
     
-        // approve tokens
-        transaction = await token.connect(signer).approve(exchange.address, amountToTransfer);
-        result = transaction.wait();
         
-        // deposit tokens
-        transaction = await exchange.connect(signer).depositToken(token.address, amountToTransfer);
-        result = transaction.wait();
+        if (transferType === TransferType.DEPOSIT) {
+            // approve tokens
+            transaction = await token.connect(signer).approve(exchange.address, amountToTransfer);
+            result = transaction.wait();
+
+            // deposit tokens
+            transaction = await exchange.connect(signer).depositToken(token.address, amountToTransfer);
+            result = transaction.wait();
+        } else {
+            // withdraw tokens
+            transaction = await exchange.connect(signer).withdrawToken(token.address, amountToTransfer);
+            result = transaction.wait();
+        }
+        
     } catch (err) {
         dispatch({
             type: 'TRANSFER_FAIL'
@@ -127,5 +136,12 @@ export const subscribeToEvents = (exchange, dispatch) => {
             type: 'TRANSFER_SUCCESS',
             event
         })
-    })
+    });
+
+    exchange?.on('Withdraw', (token, user, value, balance, event) => {
+        dispatch({
+            type: 'TRANSFER_SUCCESS',
+            event
+        })
+    });
 }
