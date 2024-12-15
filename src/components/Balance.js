@@ -7,6 +7,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useExchangeContract } from '../hooks/useExchangeContract';
 import { useWeb3Connection } from '../hooks/useWeb3Connection';
 import { TransferType } from '../enums/transferType';
+import { formatValue } from '../utils/formatter';
 
 const Balance = () => {
     const { symbols, balances: tokenBalances } = useSelector(state => state.tokens);
@@ -98,13 +99,13 @@ const Balance = () => {
             <p>
                 <small>Wallet</small>
                 <br />
-                { Number(tokenBalances?.[0] || '0').toFixed(2) }
+                { formatValue(tokenBalances?.[0]) }
             </p>
 
             <p>
                 <small>Exchange</small>
                 <br />
-                { Number(exchangeBalances?.[0] || '0').toFixed(2) }
+                { formatValue(exchangeBalances?.[0]) }
             </p>
           </div>
   
@@ -140,13 +141,13 @@ const Balance = () => {
             <p>
                 <small>Wallet</small>
                 <br />
-                { Number(tokenBalances?.[1] || '0').toFixed(2) }
+                { formatValue(tokenBalances?.[1]) }
             </p>
 
             <p>
                 <small>Exchange</small>
                 <br />
-                { Number(exchangeBalances?.[1] || '0').toFixed(2) }
+                { formatValue(exchangeBalances?.[1]) }
             </p>
           </div>
   

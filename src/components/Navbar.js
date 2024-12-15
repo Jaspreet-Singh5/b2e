@@ -5,15 +5,12 @@ import { loadAccount } from '../store/interactions';
 import { useWeb3Connection } from '../hooks/useWeb3Connection';
 import eth from '../assets/eth.svg';
 import config from '../config.json';
+import { formatValue } from '../utils/formatter';
 
 const Navbar = () => {
 	const { account, balance, chainId } = useSelector(state => state.provider);
 	const dispatch = useDispatch();
 	const provider = useWeb3Connection();
-
-	const formattedBalance = balance
-		? Number(balance).toFixed(4)
-		: '0.0000';
 
 	const networkHandler = async (event) => {
 		await window.ethereum.request({
@@ -53,7 +50,7 @@ const Navbar = () => {
 			<div className='exchange__header--account flex'>
 				<p>
 					<small>My Balance</small>
-					{`${formattedBalance} ETH`}
+					{`${formatValue(balance)} ETH`}
 				</p>
 
 				{
