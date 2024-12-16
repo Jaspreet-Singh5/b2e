@@ -101,7 +101,7 @@ const Order = () => {
                 </span>
             </div>
             <button className='button button--filled' type='submit'>
-                {orderType} ORDER
+                {orderType} Order
             </button>
         </form>
       </div>

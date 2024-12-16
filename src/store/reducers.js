@@ -68,7 +68,10 @@ const DEFAULT_EXCHANGE_STATE = {
     loaded: false, 
     balances: [], 
     events: [],
-    orders: []
+    allOrders: {
+        loaded: false,
+        data: []
+    },
 };
 
 export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
@@ -163,7 +166,10 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
                     transactionType: TransactionType.NEW_ORDER,
                 },
                 events: [ ...state.events, action.event ],
-                orders: [ ...state.orders, action.order ],
+                allOrders: { 
+                    ...state.allOrders, 
+                    data: [ ...state.allOrders.data, action.order ]
+                },
             }
 
         default:
