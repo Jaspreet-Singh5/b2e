@@ -1,3 +1,5 @@
+import { TransactionType } from "../enums/transactionType";
+
 export const provider = (state = {}, action) => {
     switch (action.type) {
         case 'NETWORK_LOADED':
@@ -65,7 +67,8 @@ export const tokens = (state = DEFAULT_TOKENS_STATE, action) => {
 const DEFAULT_EXCHANGE_STATE = { 
     loaded: false, 
     balances: [], 
-    events: [] 
+    events: [],
+    orders: []
 };
 
 export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
@@ -98,7 +101,7 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
                 transaction: {
                     isPending: true,
                     isSuccessful: false,
-                    transactionType: 'TRANSFER'
+                    transactionType: TransactionType.TRANSFER
                 },
                 transferInProgress: true
             }
@@ -109,7 +112,7 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
                 transaction: {
                     isPending: false,
                     isSuccessful: true,
-                    transactionType: 'TRANSFER'
+                    transactionType: TransactionType.TRANSFER
                 },
                 transferInProgress: false,
                 events: [ ...state.events, action.event ]
@@ -121,10 +124,46 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
                 transaction: {
                     isPending: false,
                     isSuccessful: false,
-                    transactionType: 'TRANSFER',
+                    transactionType: TransactionType.TRANSFER,
                     isError: true
                 },
                 transferInProgress: false,
+            }
+        
+        // ------------------------------
+        // ORDER CASES (BUY & SELL)
+
+        case 'NEW_ORDER_REQUEST':
+            return {
+                ...state,
+                transaction: {
+                    isPending: true,
+                    isSuccess: false,
+                    transactionType: TransactionType.NEW_ORDER
+                },
+            }            
+        
+        case 'NEW_ORDER_FAIL':
+            return {
+                ...state,
+                transaction: {
+                    isPending: false,
+                    isSuccess: false,
+                    transactionType: TransactionType.NEW_ORDER,
+                    isError: true
+                },
+            }
+        
+        case 'NEW_ORDER_SUCCESS':
+            return {
+                ...state,
+                transaction: {
+                    isPending: false,
+                    isSuccess: true,
+                    transactionType: TransactionType.NEW_ORDER,
+                },
+                events: [ ...state.events, action.event ],
+                orders: [ ...state.orders, action.order ],
             }
 
         default:

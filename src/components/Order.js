@@ -1,7 +1,11 @@
 import { useState, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { OrderType } from '../enums/orderType';
 import { formatValue } from '../utils/formatter';
+import { useWeb3Connection } from '../hooks/useWeb3Connection';
+import { useExchangeContract } from '../hooks/useExchangeContract';
+import { useTokensContracts } from '../hooks/useTokensContracts';
+import { orderTokens } from '../store/interactions';
 
 const Order = () => {
     const [ amount, setAmount ] = useState(0);
@@ -11,7 +15,13 @@ const Order = () => {
     const buyRef = useRef();
     const sellRef = useRef();
 
-    const { symbols } = useSelector(state => state.tokens);    
+    const { symbols } = useSelector(state => state.tokens);
+    
+    const provider = useWeb3Connection();
+    const exchange = useExchangeContract();
+    const [ tokens ] = useTokensContracts();
+
+    const dispatch = useDispatch();
 
     const tabHandler = (e) => {
         if (e.target == buyRef.current) {
@@ -27,8 +37,10 @@ const Order = () => {
         }
     }
 
-    const orderHandler = (e) => {
+    const orderHandler = async (e) => {
         e.preventDefault();
+
+        await orderTokens(provider, exchange, orderType, tokens, amount, price, dispatch);
 
         setAmount(0);
         setPrice(0);

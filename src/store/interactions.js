@@ -1,6 +1,8 @@
 import { ethers } from "ethers";
 import TOKEN_ABI from '../abis/Token.json';
 import { TransferType } from "../enums/transferType";
+import { OrderType } from "../enums/orderType";
+import { parseTokens } from "../utils/parser";
 
 export const loadNetwork = async (provider, dispatch) => {
     if (!provider) return;
@@ -105,8 +107,8 @@ export const transferTokens = async (provider, transferType, token, amount, exch
     });
 
     try {
-        const amountToTransfer = ethers.utils.parseEther(amount.toString());
-        const signer = provider.getSigner();
+        const amountToTransfer = parseTokens(amount.toString());
+        const signer = await provider.getSigner();
     
         
         if (transferType === TransferType.DEPOSIT) {
@@ -144,4 +146,70 @@ export const subscribeToEvents = (exchange, dispatch) => {
             event
         })
     });
+
+    exchange?.on('Order', (
+        id,
+        user,
+        tokenGet,
+        valueGet,
+        tokenGive,
+        valueGive,
+        timestamp,
+        event
+    ) => {
+        const order = {
+            id: id.toString(),
+            user,
+            tokenGet,
+            valueGet: ethers.utils.formatEther(valueGet),
+            tokenGive,
+            valueGive: ethers.utils.formatEther(valueGive),
+            timestamp: timestamp.toString(),
+        };
+
+        dispatch({
+            type: 'NEW_ORDER_SUCCESS',
+            order,
+            event
+        })
+    });
+}
+
+export const orderTokens = async (provider, exchange, orderType, tokens, amount, price, dispatch) => {
+    const signer = await provider.getSigner();
+    let transaction, result;
+
+    dispatch({
+        type: 'NEW_ORDER_REQUEST'
+    })
+
+    try {
+        if (orderType === OrderType.BUY) {
+            transaction = await exchange
+                .connect(signer)
+                .makeOrder(
+                    tokens[0].address,
+                    parseTokens(amount),
+                    tokens[1].address,
+                    parseTokens(amount * price)
+                );
+            result = transaction.wait();
+        } else {
+            transaction = await exchange
+                .connect(signer)
+                .makeOrder(
+                    tokens[1].address,
+                    parseTokens(amount * price),
+                    tokens[0].address,
+                    parseTokens(amount)
+                );
+            result = transaction.wait();
+        }
+    } catch (err) {
+        console.error(err);
+
+        dispatch({
+            type: 'NEW_ORDER_FAIL'
+        })
+    }
 }
