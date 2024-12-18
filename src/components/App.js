@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { loadAccount, loadSymbol, subscribeToEvents } from '../store/interactions';
+import { loadAccount, loadAllOrders, subscribeToEvents } from '../store/interactions';
 import { useWeb3Connection } from '../hooks/useWeb3Connection';
 import Navbar from './Navbar';
 import Markets from './Markets';
 import Balance from './Balance';
 import { useExchangeContract } from '../hooks/useExchangeContract';
 import Order from './Order';
+import OrderBook from './OrderBook';
 
 function App() {
 	const dispatch = useDispatch();
@@ -23,16 +24,19 @@ function App() {
 		} catch (err) {
 			console.log(err);
 		}
-  	}
-
+	}
+	
 	useEffect(() => {
 		window.ethereum.on('chainChanged', () => {
 			window.location.reload();
 		});
-
-		console.log(exchange);
-		subscribeToEvents(exchange, dispatch);
+		
 		loadBlockchainData();
+
+		// Fetch all orders: open, filled, cancelled
+		loadAllOrders(exchange, provider, dispatch);
+
+		subscribeToEvents(exchange, dispatch);
   	}, [ provider, exchange ]);
  
   	return (
@@ -63,6 +67,7 @@ function App() {
 				{/* Trades */}
 
 				{/* OrderBook */}
+				<OrderBook />
 
 				</section>
 			</main>

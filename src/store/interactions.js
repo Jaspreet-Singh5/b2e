@@ -3,6 +3,7 @@ import TOKEN_ABI from '../abis/Token.json';
 import { TransferType } from "../enums/transferType";
 import { OrderType } from "../enums/orderType";
 import { parseTokens } from "../utils/parser";
+import { formatOrder } from "../utils/formatter";
 
 export const loadNetwork = async (provider, dispatch) => {
     if (!provider) return;
@@ -157,15 +158,7 @@ export const subscribeToEvents = (exchange, dispatch) => {
         timestamp,
         event
     ) => {
-        const order = {
-            id: id.toString(),
-            user,
-            tokenGet,
-            valueGet: ethers.utils.formatEther(valueGet),
-            tokenGive,
-            valueGive: ethers.utils.formatEther(valueGive),
-            timestamp: timestamp.toString(),
-        };
+        const order = formatOrder(event.args);
 
         dispatch({
             type: 'NEW_ORDER_SUCCESS',
@@ -212,4 +205,16 @@ export const orderTokens = async (provider, exchange, orderType, tokens, amount,
             type: 'NEW_ORDER_FAIL'
         })
     }
+}
+
+export const loadAllOrders = async (exchange, provider, dispatch) => {
+    if (!exchange) return;
+
+    const orderLogs = await exchange.queryFilter('Order');
+    const allOrders = orderLogs.map(orderLog => formatOrder(orderLog.args));
+    
+    dispatch({
+        type: 'ALL_ORDERS_LOADED',
+        allOrders
+    })
 }

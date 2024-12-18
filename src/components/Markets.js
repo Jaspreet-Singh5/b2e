@@ -33,7 +33,7 @@ const Markets = () => {
                                 <option 
                                     value={`${pairToken1Val.address},${pairToken2Val.address}`} 
                                     key={`${pairToken1Val.address},${pairToken2Val.address}`}>
-                                        {pairToken1} / {pairToken2}
+                                        {pairToken1}/{pairToken2}
                                 </option>
                             ))
                         ))

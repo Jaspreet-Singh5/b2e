@@ -75,13 +75,26 @@ const DEFAULT_EXCHANGE_STATE = {
 };
 
 export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
+    let isDuplicateOrder, data;
+    
     switch (action.type) {
         case 'EXCHANGE_LOADED':
             return {
                 ...state,
                 loaded: true
             }
-
+        
+        // -------------------------------
+        // ORDERS LOADED (CANCELLED, FILLED & OPEN)
+        case 'ALL_ORDERS_LOADED':
+            return {
+                ...state,
+                allOrders: {
+                    loaded: true,
+                    data: [ ...action.allOrders ]
+                }
+            }
+    
         // --------------------------------------
         // BALANCE CASES
         case 'EXCHANGE_TOKEN1_BALANCE_LOADED':
@@ -158,6 +171,15 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
             }
         
         case 'NEW_ORDER_SUCCESS':
+            // prevent duplicate orders
+            isDuplicateOrder = state.allOrders.data.find(order => order.id.toString() === action.order.id.toString());
+            
+            if (isDuplicateOrder) {
+                data = state.allOrders.data;
+            } else {
+                data = [ ...state.allOrders.data, action.order ]
+            }
+
             return {
                 ...state,
                 transaction: {
@@ -168,10 +190,10 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
                 events: [ ...state.events, action.event ],
                 allOrders: { 
                     ...state.allOrders, 
-                    data: [ ...state.allOrders.data, action.order ]
+                    data: data
                 },
             }
-
+        
         default:
             return state;
     }
