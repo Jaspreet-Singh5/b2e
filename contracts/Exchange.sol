@@ -119,7 +119,7 @@ contract Exchange {
         address _tokenGet,
         uint256 _valueGet,
         address _tokenGive,
-        uint256 _valueGive'
+        uint256 _valueGive
     ) public 
     {
         // should have enought tokens to give
