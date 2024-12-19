@@ -1,8 +1,13 @@
 import { useSelector } from 'react-redux';
 import sort from '../assets/sort.svg';
+import { orderBookSelector } from '../store/selectors';
+import { useTokensContracts } from '../hooks/useTokensContracts';
 
 const OrderBook = () => {
+    const [ tokens ] = useTokensContracts();
+    
     const { symbols } = useSelector(state => state.tokens);
+    const orderBook = useSelector(state => orderBookSelector(state, tokens));
 
     return (
         <div className="component exchange__orderbook">
