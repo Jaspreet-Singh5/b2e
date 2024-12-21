@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 import sort from '../assets/sort.svg';
 import { orderBookSelector } from '../store/selectors';
 import { useTokensContracts } from '../hooks/useTokensContracts';
+import { OrderType } from '../enums/orderType';
 
 const OrderBook = () => {
     const [ tokens ] = useTokensContracts();
@@ -16,24 +17,38 @@ const OrderBook = () => {
             </div>
 
             <div className="flex">
+                {
+                    orderBook?.[OrderType.SELL]
+                    ? (
+                        <table className='exchange__orderbook--sell'>
+                            <caption>Selling</caption>
+                            <thead>
+                                <tr>
+                                    <th>{symbols?.[0]}<img src={sort} alt='Sort' /></th>
+                                    <th>{symbols?.[0]}/{symbols?.[1]}<img src={sort} alt='Sort' /></th>
+                                    <th>{symbols?.[1]}<img src={sort} alt='Sort' /></th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                <table className='exchange__orderbook--sell'>
-                    <caption>Selling</caption>
-                    <thead>
-                        <tr>
-                            <th>{symbols?.[0]}<img src={sort} alt='Sort' /></th>
-                            <th>{symbols?.[0]}/{symbols?.[1]}<img src={sort} alt='Sort' /></th>
-                            <th>{symbols?.[1]}<img src={sort} alt='Sort' /></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
+                                {/* MAPPING OF SELLING ORDERS */}
+                                {
+                                    orderBook[OrderType.SELL].map(order => {
+                                        return (
+                                            <tr key={btoa(order.id)}>
+                                                <td>{order.token0Amount}</td>
+                                                <td style={{color: order.orderTypeClass}}>{order.tokenPrice}</td>
+                                                <td>{order.token1Amount}</td>
+                                            </tr>
+                                        );
+                                    })
+                                }
+                            </tbody>
+                        </table>
+                    )
+                    : 'No Sell Orders'
+                }
+
 
                 <div className='divider'></div>
 
