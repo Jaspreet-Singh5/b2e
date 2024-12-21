@@ -70,6 +70,11 @@ export const orderBookSelector = createSelector([
     // decorate orders
     orders = decorateOrderBookOrders(orders, tokens);
 
+    // sort orders by token price
+    orders.sort((a, b) => {
+        return b.tokenPrice - a.tokenPrice;
+    });
+
     // group orders by order type
     orders = Object.groupBy(orders, order => order.orderType);
     
