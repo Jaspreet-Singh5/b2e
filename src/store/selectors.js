@@ -1,5 +1,11 @@
 import { createSelector } from 'reselect';
 import moment from 'moment';
+import { OrderType } from '../enums/orderType';
+
+
+const GREEN = '#25CE8F';
+const RED = '#F45353';
+
 const decorateOrder = (order, tokens) => {
     let token0Amount, token1Amount;
 
@@ -25,6 +31,28 @@ const decorateOrder = (order, tokens) => {
     }
 }
 
+const decorateOrderBookOrder = (order, tokens) => {
+    const orderType = order.tokenGet === tokens[0].address ? OrderType.BUY : OrderType.SELL;
+
+    return {
+        ...order,
+        orderType,
+        orderTypeClass: (orderType === OrderType.BUY ? GREEN : RED),
+        orderFillAction: (orderType === OrderType.BUY ? OrderType.SELL : OrderType.BUY),
+    }
+}
+
+const decorateOrderBookOrders = (orders, tokens) => {
+    return (
+        orders.map(order => {
+            order = decorateOrder(order, tokens);
+            order = decorateOrderBookOrder(order, tokens);
+    
+            return order;
+        })
+    );
+}
+
 export const orderBookSelector = createSelector([
     state => state.exchange.allOrders.data,
     (_, tokens) => tokens
@@ -39,5 +67,8 @@ export const orderBookSelector = createSelector([
         tokenAddresses.has(order.tokenGive)
     ));
 
+    // decorate orders
+    orders = decorateOrderBookOrders(orders, tokens);
+    
     return orders;
 })
