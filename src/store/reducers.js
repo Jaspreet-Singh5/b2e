@@ -72,6 +72,10 @@ const DEFAULT_EXCHANGE_STATE = {
         loaded: false,
         data: []
     },
+    cancelledOrders: {
+        loaded: false,
+        data: []
+    },
 };
 
 export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {

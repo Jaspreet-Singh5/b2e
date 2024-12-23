@@ -210,8 +210,18 @@ export const orderTokens = async (provider, exchange, orderType, tokens, amount,
 export const loadAllOrders = async (exchange, provider, dispatch) => {
     if (!exchange) return;
 
-    const orderLogs = await exchange.queryFilter('Order');
-    const allOrders = orderLogs.map(orderLog => formatOrder(orderLog.args));
+    // fetch cancelled orders
+    const cancelledOrdersLogs = await exchange.queryFilter('Cancel');
+    const cancelledOrders = cancelledOrdersLogs.map(cancelledOrdersLog => formatOrder(cancelledOrdersLog.args));
+
+    dispatch({
+        type: 'CANCELLED_ORDERS_LOADED',
+        cancelledOrders
+    })
+
+    // fetch all orders
+    const allOrderLogs = await exchange.queryFilter('Order');
+    const allOrders = allOrderLogs.map(orderLog => formatOrder(orderLog.args));
     
     dispatch({
         type: 'ALL_ORDERS_LOADED',
