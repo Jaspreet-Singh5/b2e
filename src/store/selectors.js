@@ -53,8 +53,19 @@ const decorateOrderBookOrders = (orders, tokens) => {
     );
 }
 
+const openOrders = state => {
+    const allOrders = state.exchange.allOrders.data;
+    const filledOrders = state.exchange.filledOrders.data;
+    const cancelledOrders = state.exchange.cancelledOrders.data;
+
+    return allOrders.filter(order => !(
+        filledOrders.some(filledOrder => filledOrder.id === order.id) ||
+        cancelledOrders.some(cancelledOrder => cancelledOrder.id === order.id)
+    ));
+};
+
 export const orderBookSelector = createSelector([
-    state => state.exchange.allOrders.data,
+    openOrders,
     (_, tokens) => tokens
 ], (orders, tokens) => {
     if (!tokens[0] || !tokens[1]) return;
