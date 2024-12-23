@@ -76,6 +76,10 @@ const DEFAULT_EXCHANGE_STATE = {
         loaded: false,
         data: []
     },
+    filledOrders: {
+        loaded: false,
+        data: []
+    },
 };
 
 export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
@@ -98,6 +102,16 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
                     ...state.cancelledOrders,
                     loaded: true,
                     data: [ ...action.cancelledOrders ]
+                }
+            }
+        
+        case 'FILLED_ORDERS_LOADED':
+            return {
+                ...state,
+                filledOrders: {
+                    ...state.filledOrders,
+                    loaded: true,
+                    data: [ ...action.filledOrders ]
                 }
             }
 

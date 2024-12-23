@@ -217,7 +217,16 @@ export const loadAllOrders = async (exchange, provider, dispatch) => {
     dispatch({
         type: 'CANCELLED_ORDERS_LOADED',
         cancelledOrders
-    })
+    });
+
+    // fetch filled orders
+    const filledOrdersLogs = await exchange.queryFilter('Trade');
+    const filledOrders = filledOrdersLogs.map(filledOrdersLog => formatOrder(filledOrdersLog.args));
+
+    dispatch({
+        type: 'FILLED_ORDERS_LOADED',
+        filledOrders
+    });
 
     // fetch all orders
     const allOrderLogs = await exchange.queryFilter('Order');
