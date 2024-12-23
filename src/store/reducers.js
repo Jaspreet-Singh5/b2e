@@ -90,10 +90,22 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
         
         // -------------------------------
         // ORDERS LOADED (CANCELLED, FILLED & OPEN)
+
+        case 'CANCELLED_ORDERS_LOADED':
+            return {
+                ...state,
+                cancelledOrders: {
+                    ...state.cancelledOrders,
+                    loaded: true,
+                    data: [ ...action.cancelledOrders ]
+                }
+            }
+
         case 'ALL_ORDERS_LOADED':
             return {
                 ...state,
                 allOrders: {
+                    ...state.allOrders,
                     loaded: true,
                     data: [ ...action.allOrders ]
                 }
