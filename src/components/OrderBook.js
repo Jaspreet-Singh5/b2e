@@ -46,29 +46,46 @@ const OrderBook = () => {
                             </tbody>
                         </table>
                     )
-                    : 'No Sell Orders'
+                    : (
+                        <p className='flex-center'>No Sell Orders</p>
+                    )
                 }
 
 
                 <div className='divider'></div>
 
-                <table className='exchange__orderbook--buy'>
-                    <caption>Buying</caption>
-                    <thead>
-                        <tr>
-                            <th>{symbols?.[0]}<img src={sort} alt='Sort' /></th>
-                            <th>{symbols?.[0]}/{symbols?.[1]}<img src={sort} alt='Sort' /></th>
-                            <th>{symbols?.[1]}<img src={sort} alt='Sort' /></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
+                {
+                    orderBook?.[OrderType.BUY]
+                    ? (
+                        <table className='exchange__orderbook--buy'>
+                            <caption>Buying</caption>
+                            <thead>
+                                <tr>
+                                    <th>{symbols?.[0]}<img src={sort} alt='Sort' /></th>
+                                    <th>{symbols?.[0]}/{symbols?.[1]}<img src={sort} alt='Sort' /></th>
+                                    <th>{symbols?.[1]}<img src={sort} alt='Sort' /></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                {
+                                    orderBook[OrderType.BUY].map(order => {
+                                        return (
+                                            <tr key={btoa(order.id)}>
+                                                <td>{order.token0Amount}</td>
+                                                <td style={{color: order.orderTypeClass}}>{order.tokenPrice}</td>
+                                                <td>{order.token1Amount}</td>
+                                            </tr>
+                                        );
+                                    })
+                                }
+                            </tbody>
+                        </table>
+                    )
+                    : (
+                        <p className='flex-center'>No Buy Orders</p>
+                    )
+                }
             </div>
         </div>
     );
