@@ -12,7 +12,7 @@ const PriceChart = () => {
     const { account } = useSelector(state => state.provider);
     const { symbols } = useSelector(state => state.tokens);
     const priceChart = useSelector(state => priceChartSelector(state, tokens));
-    
+
     return (
         <div className="component exchange__chart">
             <div className='component__header flex-between'>
@@ -22,7 +22,7 @@ const PriceChart = () => {
 
                     <div className='flex'>
                         <img src={downArrow} alt="Arrow down" />
-                        <span className='up'></span>
+                        <span className='up'>{priceChart?.lastOrderPrice}</span>
                     </div>
 
                 </div>
@@ -37,7 +37,7 @@ const PriceChart = () => {
                         type='candlestick'
                         width='100%'
                         height='100%'
-                        series={series}
+                        series={priceChart?.series ?? series}
                     />
                 ) : (
                     <Banner>

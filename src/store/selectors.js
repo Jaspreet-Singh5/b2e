@@ -148,5 +148,14 @@ export const priceChartSelector = createSelector(
         // decorate orders - add displat attributes
         orders = orders.map(order => decorateOrder(order, tokens));
 
+        const lastOrder = _.last(orders);
+        const lastOrderPrice = lastOrder.tokenPrice ?? 0;
+
+        return ({
+            lastOrderPrice,
+            series: [{
+                data: buildGraphData(orders, 'hour')
+            }]
+        });
     }
 )
