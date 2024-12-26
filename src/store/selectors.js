@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import moment from 'moment';
 import { OrderType } from '../enums/orderType';
+import _ from 'lodash';
 
 
 const GREEN = '#25CE8F';
@@ -64,19 +65,26 @@ const openOrders = state => {
     ));
 };
 
+const filterOrdersByTokens = (orders, tokens) => {
+    const tokenAddresses = new Set([tokens[0].address, tokens[1].address])
+
+    return orders.filter(order => (
+        tokenAddresses.has(order.tokenGet) &&
+        tokenAddresses.has(order.tokenGive)
+    ));
+}
+
+// -------------------------------------------------------
+// ORDER BOOK
+
 export const orderBookSelector = createSelector([
     openOrders,
     (_, tokens) => tokens
 ], (orders, tokens) => {
     if (!tokens[0] || !tokens[1]) return;
     
-    // filter by selected trading pair
-    const tokenAddresses = new Set([tokens[0].address, tokens[1].address])
-
-    orders = orders.filter(order => (
-        tokenAddresses.has(order.tokenGet) ||
-        tokenAddresses.has(order.tokenGive)
-    ));
+    // filter orders by selected trading pair
+    orders = filterOrdersByTokens(orders, tokens);
 
     // decorate orders
     orders = decorateOrderBookOrders(orders, tokens);
@@ -91,3 +99,54 @@ export const orderBookSelector = createSelector([
     
     return orders;
 })
+
+// -------------------------------------------------------
+// PRICE CHART
+
+const buildGraphData = (orders, interval) => {
+    // group the orders by interval for the graph
+    orders = Object.groupBy(orders, order => moment.unix(order.timestamp).startOf(interval).format());
+
+    // get each hour where data exists
+    const hours = Object.keys(orders);
+
+    // build the graph series
+    return hours.map(hour => {
+        // fetch all orders from current hour
+        const hourOrders = orders[hour];
+
+        // calculate price values: open, high, low, close            
+        const open = hourOrders[0];
+        const high = _.maxBy(hourOrders, 'tokenPrice');
+        const low = _.minBy(hourOrders, 'tokenPrice');
+        const close = _.last(hourOrders);
+
+        return {
+            x: new Date(hour),
+            y: [
+                open.tokenPrice,
+                high.tokenPrice,
+                low.tokenPrice,
+                close.tokenPrice
+            ]
+        }
+    });
+}
+
+export const priceChartSelector = createSelector(
+    state => state.exchange.filledOrders.data,
+    (_, tokens) => tokens,
+    (orders, tokens) => {
+        if (!tokens[0] || !tokens[1]) return;
+
+        // filter orders by selected trading pair
+        orders = filterOrdersByTokens(orders, tokens);
+
+        // sort orders by date asc to compare history
+        orders = _.sortBy(orders, order => +order.timestamp);
+
+        // decorate orders - add displat attributes
+        orders = orders.map(order => decorateOrder(order, tokens));
+
+    }
+)

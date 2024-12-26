@@ -3,11 +3,16 @@ import { useSelector } from 'react-redux';
 import Banner from './Banner';
 import Chart from 'react-apexcharts';
 import { options, series } from './PriceChart.config';
+import { priceChartSelector } from '../store/selectors';
+import { useTokensContracts } from '../hooks/useTokensContracts';
 
 const PriceChart = () => {
+    const [ tokens ] = useTokensContracts();
+
     const { account } = useSelector(state => state.provider);
     const { symbols } = useSelector(state => state.tokens);
-
+    const priceChart = useSelector(state => priceChartSelector(state, tokens));
+    
     return (
         <div className="component exchange__chart">
             <div className='component__header flex-between'>
