@@ -81,7 +81,7 @@ export const orderBookSelector = createSelector([
     openOrders,
     (_, tokens) => tokens
 ], (orders, tokens) => {
-    if (!tokens[0] || !tokens[1]) return;
+    if (!orders?.length > 0 || !tokens[0] || !tokens[1]) return;
     
     // filter orders by selected trading pair
     orders = filterOrdersByTokens(orders, tokens);
@@ -137,7 +137,7 @@ export const priceChartSelector = createSelector(
     state => state.exchange.filledOrders.data,
     (_, tokens) => tokens,
     (orders, tokens) => {
-        if (!tokens[0] || !tokens[1]) return;
+        if (!orders?.length > 0 || !tokens[0] || !tokens[1]) return;
 
         // filter orders by selected trading pair
         orders = filterOrdersByTokens(orders, tokens);
@@ -152,10 +152,10 @@ export const priceChartSelector = createSelector(
         const [secondLastOrder, lastOrder] = orders.slice(orders.length -  2);
         
         // get last order price
-        const lastOrderPrice = lastOrder.tokenPrice ?? 0;
+        const lastOrderPrice = lastOrder?.tokenPrice ?? 0;
 
         // get second last order price
-        const secondLastOrderPrice = secondLastOrder.tokenPrice ?? 0;
+        const secondLastOrderPrice = secondLastOrder?.tokenPrice ?? 0;
 
         return ({
             lastOrderPrice,
