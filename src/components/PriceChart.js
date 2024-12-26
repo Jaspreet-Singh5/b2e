@@ -1,13 +1,14 @@
 import downArrow from '../assets/down-arrow.svg';
+import upArrow from '../assets/up-arrow.svg';
 import { useSelector } from 'react-redux';
 import Banner from './Banner';
 import Chart from 'react-apexcharts';
-import { options, series } from './PriceChart.config';
+import { defaultSeries, options } from './PriceChart.config';
 import { priceChartSelector } from '../store/selectors';
 import { useTokensContracts } from '../hooks/useTokensContracts';
 
 const PriceChart = () => {
-    const [ tokens ] = useTokensContracts();
+    const [tokens] = useTokensContracts();
 
     const { account } = useSelector(state => state.provider);
     const { symbols } = useSelector(state => state.tokens);
@@ -21,7 +22,12 @@ const PriceChart = () => {
                     <h2>{symbols?.[0]}/{symbols?.[1]}</h2>
 
                     <div className='flex'>
-                        <img src={downArrow} alt="Arrow down" />
+                        {priceChart?.lastPriceChange === '+' ? (
+                            <img src={upArrow} alt="Arrow up" />
+                        ) : (
+                            <img src={downArrow} alt="Arrow down" />
+                        )}
+
                         <span className='up'>{priceChart?.lastOrderPrice}</span>
                     </div>
 
@@ -31,19 +37,19 @@ const PriceChart = () => {
             {/* Price chart goes here */}
             {
                 account
-                ? (
-                    <Chart
-                        options={options}  
-                        type='candlestick'
-                        width='100%'
-                        height='100%'
-                        series={priceChart?.series ?? series}
-                    />
-                ) : (
-                    <Banner>
-                        Please Connect with MetaMask
-                    </Banner>
-                )
+                    ? (
+                        <Chart
+                            options={options}
+                            type='candlestick'
+                            width='100%'
+                            height='100%'
+                            series={priceChart?.series ?? defaultSeries}
+                        />
+                    ) : (
+                        <Banner>
+                            Please Connect with MetaMask
+                        </Banner>
+                    )
             }
 
         </div>
