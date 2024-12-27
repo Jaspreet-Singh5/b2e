@@ -166,3 +166,50 @@ export const priceChartSelector = createSelector(
         });
     }
 )
+
+// ------------------------------------------------
+// ALL FILLED ORDERS
+
+const decorateFilledOrder = (order, prevOrder = order) => {
+    return {
+        ...order,
+        tokenPriceClass: (order?.tokenPrice >= prevOrder?.tokenPrice ? GREEN : RED),
+    }
+}
+
+const decorateFilledOrders = (orders, tokens) => {
+    let prevOrder;
+
+    return (
+        orders.map(order => {
+            order = decorateOrder(order, tokens);
+            order = decorateFilledOrder(order, prevOrder);
+
+            prevOrder = order; // update the previous order
+            
+            return order;
+        })
+    )
+}
+
+export const filledOrdersSelector = createSelector(
+    state => state.exchange.filledOrders.data,
+    (_, tokens) => tokens,
+    (orders, tokens) => {
+        if (!orders?.length > 0 || !tokens[0] || !tokens[1]) return;
+
+        // filter orders by selected tokens pair
+        orders = filterOrdersByTokens(orders, tokens);
+
+        // sort orders by time asc for price comparison
+        orders.sort((a,b ) => +a.timestamp - +b.timestamp);
+
+        // decorate the orders
+        orders = decorateFilledOrders(orders, tokens);
+
+        // sort orders by time desc for display
+        orders.sort((a, b) => +b.timestamp - +a.timestamp);
+
+        return orders;
+    }
+)
