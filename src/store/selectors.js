@@ -7,6 +7,8 @@ import _ from 'lodash';
 const GREEN = '#25CE8F';
 const RED = '#F45353';
 
+const account = state => state.provider.account;
+
 const decorateOrder = (order, tokens) => {
     let token0Amount, token1Amount;
 
@@ -208,6 +210,32 @@ export const filledOrdersSelector = createSelector(
         orders = decorateFilledOrders(orders, tokens);
 
         // sort orders by time desc for display
+        orders.sort((a, b) => +b.timestamp - +a.timestamp);
+
+        return orders;
+    }
+)
+
+// ------------------------------
+// MY OPEN ORDERS
+
+export const myOpenOrdersSelector = createSelector(
+    openOrders,
+    account,
+    (_, tokens) => tokens,
+    (orders, user, tokens) => {
+        if (!orders?.length > 0 || !tokens[0] || !tokens[1]) return;
+
+        // filter orders created by current user
+        orders = orders.filter(order => order.user === user);
+
+        // filter by selected token pair
+        orders = filterOrdersByTokens(orders, tokens);
+
+        // deocorate orders - add display attributes
+        orders = decorateOrderBookOrders(orders, tokens);
+
+        // sort by time desc
         orders.sort((a, b) => +b.timestamp - +a.timestamp);
 
         return orders;
