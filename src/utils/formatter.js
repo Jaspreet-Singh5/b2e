@@ -14,7 +14,8 @@ export const formatOrder = (order) => {
         valueGet,
         tokenGive,
         valueGive,
-        timestamp
+        timestamp,
+        creator
     } = order;
     
     return {
@@ -25,5 +26,6 @@ export const formatOrder = (order) => {
         tokenGive,
         valueGive: ethers.utils.formatEther(valueGive),
         timestamp: timestamp.toString(),
+        creator
     };
 }

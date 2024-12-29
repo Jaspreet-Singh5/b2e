@@ -7,7 +7,9 @@ import _ from 'lodash';
 const GREEN = '#25CE8F';
 const RED = '#F45353';
 
+// INPUT SELECTORS
 const account = state => state.provider.account;
+const  filledOrders = state => state.exchange.filledOrders.data;
 
 const decorateOrder = (order, tokens) => {
     let token0Amount, token1Amount;
@@ -237,6 +239,61 @@ export const myOpenOrdersSelector = createSelector(
 
         // sort by time desc
         orders.sort((a, b) => +b.timestamp - +a.timestamp);
+
+        return orders;
+    }
+)
+
+// ------------------------------
+// MY FILLED ORDERS
+
+const decorateMyFilledOrder = (order, account, tokens) => {
+    const myOrder = order.creator === account;
+    let orderType;
+
+    if (myOrder) {
+        orderType = order.tokenGet === tokens[0].address ? OrderType.BUY : OrderType.SELL;
+    } else {
+        orderType = order.tokenGet === tokens[0].address ? OrderType.SELL : OrderType.BUY;
+    }
+
+    return {
+        ...order,
+        orderType,
+        orderSign: (orderType === OrderType.BUY ? '+' : '-')
+    }
+}
+
+const decorateMyFilledOrders = (orders, account, tokens) => (
+    orders.map(order => {
+        order = decorateOrder(order, tokens);
+        order = decorateMyFilledOrder(order, account, tokens);
+
+        return order;
+    })
+);
+
+export const myFilledOrdersSelector = createSelector(
+    account,
+    (_, tokens) => tokens,
+    filledOrders,
+    (account, tokens, orders) => {
+        if (!tokens[0] || !tokens[1]) return;
+
+        // filter orders by current user
+        orders = orders.filter(order => (
+            order.user === account ||
+            order.creator === account
+        ));
+
+        // filter orders by selected token pair
+        orders = filterOrdersByTokens(orders, tokens);
+
+        // sort by time desc
+        orders.sort((a, b) => +b.timestamp - +a.timestamp);
+
+        // decorate orders - add display attributes
+        orders = decorateMyFilledOrders(orders, account, tokens);
 
         return orders;
     }

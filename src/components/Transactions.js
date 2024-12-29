@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { useTokensContracts } from '../hooks/useTokensContracts';
-import { myOpenOrdersSelector } from '../store/selectors';
+import { myFilledOrdersSelector, myOpenOrdersSelector } from '../store/selectors';
 import sort from '../assets/sort.svg';
 import Banner from './Banner';
 import { useState, useRef } from 'react';
@@ -10,6 +10,7 @@ const Transactions = () => {
 
     const myOpenOrders = useSelector(state => myOpenOrdersSelector(state, tokens));
     const { symbols } = useSelector(state => state.tokens);
+    const myFilledOrders = useSelector(state => myFilledOrdersSelector(state, tokens));
 
     const [isShowOrders, setIsShowOrders] = useState(true);
 
