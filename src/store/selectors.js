@@ -260,7 +260,8 @@ const decorateMyFilledOrder = (order, account, tokens) => {
     return {
         ...order,
         orderType,
-        orderSign: (orderType === OrderType.BUY ? '+' : '-')
+        orderSign: (orderType === OrderType.BUY ? '+' : '-'),
+        orderTypeClass: (orderType === OrderType.BUY ? GREEN : RED)
     }
 }
 

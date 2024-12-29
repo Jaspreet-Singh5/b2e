@@ -67,8 +67,8 @@ const Transactions = () => {
                                             {
                                                 myOpenOrders?.map(order => (
                                                     <tr key={order.id}>
-                                                        <td>{order.token0Amount}</td>
-                                                        <td style={{ color: order.orderTypeClass }}>{order.tokenPrice}</td>
+                                                        <td style={{ color: order.orderTypeClass }}>{order.token0Amount}</td>
+                                                        <td>{order.tokenPrice}</td>
                                                         <td></td>
                                                     </tr>
                                                 ))
@@ -107,13 +107,15 @@ const Transactions = () => {
                                 </tr>
                             </thead>
                             <tbody>
-
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-
+                                {
+                                    myFilledOrders?.map(order => (
+                                        <tr key={order.id}>
+                                            <td>{order.formattedTimestamp}</td>
+                                            <td style={{ color: order.orderTypeClass }}>{order.orderSign}{order.token0Amount}</td>
+                                            <td>{order.tokenPrice}</td>
+                                        </tr>
+                                    ))
+                                }
                             </tbody>
                         </table>
 
