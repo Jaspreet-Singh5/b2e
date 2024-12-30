@@ -166,6 +166,17 @@ export const subscribeToEvents = (exchange, dispatch) => {
             event
         })
     });
+
+    exchange?.on('Cancel', (...args) => {
+        const event = args[7];
+        const order = formatOrder(event.args);
+
+        dispatch({
+            type: 'ORDER_CANCEL_SUCCESS',
+            order,
+            event
+        })
+    })
 }
 
 export const orderTokens = async (provider, exchange, orderType, tokens, amount, price, dispatch) => {
@@ -236,4 +247,23 @@ export const loadAllOrders = async (exchange, provider, dispatch) => {
         type: 'ALL_ORDERS_LOADED',
         allOrders
     })
+}
+
+export const cancelOrder = async (orderId, exchange, provider, dispatch) => {
+    
+    dispatch({
+        type: 'ORDER_CANCEL_REQUEST'
+    });
+
+    try {
+        const signer = await provider.getSigner();
+        const transaction = await exchange.connect(signer).cancelOrder(orderId);
+        await transaction.wait();
+    } catch (err) {
+        console.log(err);
+
+        dispatch({
+            type: 'ORDER_CANCEL_FAIL',
+        })
+    }    
 }

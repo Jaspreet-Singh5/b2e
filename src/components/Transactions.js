@@ -1,12 +1,17 @@
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useTokensContracts } from '../hooks/useTokensContracts';
 import { myFilledOrdersSelector, myOpenOrdersSelector } from '../store/selectors';
 import sort from '../assets/sort.svg';
 import Banner from './Banner';
 import { useState, useRef } from 'react';
+import { cancelOrder } from '../store/interactions';
+import { useExchangeContract } from '../hooks/useExchangeContract';
+import { useWeb3Connection } from '../hooks/useWeb3Connection';
 
 const Transactions = () => {
     const [tokens] = useTokensContracts();
+    const exchange = useExchangeContract();
+    const provider = useWeb3Connection();
 
     const myOpenOrders = useSelector(state => myOpenOrdersSelector(state, tokens));
     const { symbols } = useSelector(state => state.tokens);
@@ -16,6 +21,8 @@ const Transactions = () => {
 
     const ordersRef = useRef();
     const tradesRef = useRef();
+
+    const dispatch = useDispatch();
 
     const tabHandler = (e) => {
         if (e.target === ordersRef.current) {
@@ -29,6 +36,12 @@ const Transactions = () => {
 
             setIsShowOrders(false);
         }
+    }
+
+    const cancelOrderHandler = async (e, orderId) => {
+        e.preventDefault();
+
+        await cancelOrder(orderId, exchange, provider, dispatch);
     }
 
     return (
@@ -69,7 +82,11 @@ const Transactions = () => {
                                                     <tr key={order.id}>
                                                         <td style={{ color: order.orderTypeClass }}>{order.token0Amount}</td>
                                                         <td>{order.tokenPrice}</td>
-                                                        <td></td>
+                                                        <td>
+                                                            <button
+                                                                className='button--sm'
+                                                                onClick={(e) => cancelOrderHandler(e, order.id)}>Cancel</button>
+                                                        </td>
                                                     </tr>
                                                 ))
                                             }

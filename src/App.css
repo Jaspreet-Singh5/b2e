@@ -429,12 +429,14 @@ hr {
 }
 
 .button--sm {
-	width: 50%;
+	width: 75%;
 
 	margin: 0 auto;
 	padding: 0.25em;
 
 	border-radius: 5px;
+
+	font-size: .7rem;	
 }
 
 .button span {
