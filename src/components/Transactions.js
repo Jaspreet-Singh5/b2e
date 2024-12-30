@@ -98,26 +98,33 @@ const Transactions = () => {
                             </div>
                         </div>
 
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Time<img src={sort} alt='Sort' /></th>
-                                    <th>{symbols?.[0]}<img src={sort} alt='Sort' /></th>
-                                    <th>{symbols?.[0]}/{symbols?.[1]}<img src={sort} alt='Sort' /></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    myFilledOrders?.map(order => (
-                                        <tr key={order.id}>
-                                            <td>{order.formattedTimestamp}</td>
-                                            <td style={{ color: order.orderTypeClass }}>{order.orderSign}{order.token0Amount}</td>
-                                            <td>{order.tokenPrice}</td>
+                        {
+                            myFilledOrders?.length > 0 
+                            ? (
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Time<img src={sort} alt='Sort' /></th>
+                                            <th>{symbols?.[0]}<img src={sort} alt='Sort' /></th>
+                                            <th>{symbols?.[0]}/{symbols?.[1]}<img src={sort} alt='Sort' /></th>
                                         </tr>
-                                    ))
-                                }
-                            </tbody>
-                        </table>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            myFilledOrders?.map(order => (
+                                                <tr key={order.id}>
+                                                    <td>{order.formattedTimestamp}</td>
+                                                    <td style={{ color: order.orderTypeClass }}>{order.orderSign}{order.token0Amount}</td>
+                                                    <td>{order.tokenPrice}</td>
+                                                </tr>
+                                            ))
+                                        }
+                                    </tbody>
+                                </table>
+                            ) : (
+                                <Banner>No Transactions</Banner>
+                            )
+                        }
 
                     </div>
                 )
