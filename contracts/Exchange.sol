@@ -182,6 +182,9 @@ contract Exchange {
 
         // fetch order
         _Order storage _order = orders[_id];
+        
+        // user should not fill their own order
+        require(msg.sender != _order.user);
 
         // swapping tokens (trading)
         _trade(
