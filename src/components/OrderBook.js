@@ -1,14 +1,27 @@
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import sort from '../assets/sort.svg';
 import { orderBookSelector } from '../store/selectors';
 import { useTokensContracts } from '../hooks/useTokensContracts';
 import { OrderType } from '../enums/orderType';
+import { fillOrder } from '../store/interactions';
+import { useExchangeContract } from '../hooks/useExchangeContract';
+import { useWeb3Connection } from '../hooks/useWeb3Connection';
 
 const OrderBook = () => {
     const [ tokens ] = useTokensContracts();
+    const exchange = useExchangeContract();
+    const provider = useWeb3Connection();
     
     const { symbols } = useSelector(state => state.tokens);
     const orderBook = useSelector(state => orderBookSelector(state, tokens));
+
+    const dispatch = useDispatch();
+
+    const fillOrderHandler = async (e, orderId) => {
+        e.preventDefault();
+
+        await fillOrder(orderId, exchange, provider, dispatch);
+    }
 
     return (
         <div className="component exchange__orderbook">
@@ -35,7 +48,8 @@ const OrderBook = () => {
                                 {
                                     orderBook[OrderType.SELL].map(order => {
                                         return (
-                                            <tr key={btoa(order.id)}>
+                                            <tr key={btoa(order.id)}
+                                                onClick={(e) => fillOrderHandler(e, order.id)}>
                                                 <td>{order.token0Amount}</td>
                                                 <td style={{color: order.orderTypeClass}}>{order.tokenPrice}</td>
                                                 <td>{order.token1Amount}</td>
@@ -71,7 +85,9 @@ const OrderBook = () => {
                                 {
                                     orderBook[OrderType.BUY].map(order => {
                                         return (
-                                            <tr key={btoa(order.id)}>
+                                            <tr key={btoa(order.id)}
+                                                onClick={(e) => fillOrderHandler(e, order.id)}
+                                            >
                                                 <td>{order.token0Amount}</td>
                                                 <td style={{color: order.orderTypeClass}}>{order.tokenPrice}</td>
                                                 <td>{order.token1Amount}</td>

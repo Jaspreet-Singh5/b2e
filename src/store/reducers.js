@@ -166,6 +166,48 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
                     ]
                 }
             }
+        
+        // -------------------------------------
+        // FILLING ORDERS 
+
+        case 'ORDER_FILL_REQUEST':
+            return {
+                ...state,
+                transaction: {
+                    isPending: true,
+                    isSuccess: false,
+                    transactionType: TransactionType.FILL_ORDER
+                }
+            }
+        
+        case 'ORDER_FILL_FAIL':
+            return {
+                ...state,
+                transaction: {
+                    isPending: false,
+                    isSuccess: false,
+                    isError: true,
+                    transactionType: TransactionType.FILL_ORDER
+                }
+            }
+        
+        case 'ORDER_FILL_SUCCESS':
+            return {
+                ...state,
+                transaction: {
+                    isPending: false,
+                    isSuccess: true,
+                    transactionType: TransactionType.FILL_ORDER,
+                },
+                filledOrders: {
+                    ...state.filledOrders,
+                    data: [
+                        ...state.filledOrders.data,
+                        action.order
+                    ]
+                },
+                events: [ ...state.events, action.event ]
+            }
 
         // --------------------------------------
         // BALANCE CASES

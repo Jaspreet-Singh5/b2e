@@ -176,6 +176,17 @@ export const subscribeToEvents = (exchange, dispatch) => {
             order,
             event
         })
+    });
+
+    exchange?.on('Trade', (...args) => {
+        const event = args[8];
+        const order = formatOrder(event.args);
+
+        dispatch({
+            type: 'ORDER_FILL_SUCCESS',
+            order,
+            event   
+        })
     })
 }
 
@@ -266,4 +277,19 @@ export const cancelOrder = async (orderId, exchange, provider, dispatch) => {
             type: 'ORDER_CANCEL_FAIL',
         })
     }    
+}
+
+export const fillOrder = async (orderId, exchange, provider, dispatch) => {
+    dispatch({ type: 'ORDER_FILL_REQUEST' });
+
+    try {
+        const signer = await provider.getSigner();
+
+        const transaction = await exchange.connect(signer).fillOrder(orderId);
+        transaction.wait();
+    } catch (err) {
+        console.error(err);
+
+        dispatch({ type: 'ORDER_FILL_FAIL' });
+    }
 }
