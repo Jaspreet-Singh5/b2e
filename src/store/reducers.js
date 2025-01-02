@@ -160,7 +160,7 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
                     isPending: false,
                     isSuccess: true
                 },
-                events: [...state.events, action.event],
+                events: [action.event, ...state.events],
                 cancelledOrders: {
                     ...state.cancelledOrders,
                     data: [
@@ -218,7 +218,7 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
                     ...state.filledOrders,
                     data: data
                 },
-                events: [...state.events, action.event],
+                events: [action.event, ...state.events],
                 transactionInProgress: false,
             }
 
@@ -258,7 +258,7 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
                     transactionType: TransactionType.TRANSFER
                 },
                 transactionInProgress: false,
-                events: [...state.events, action.event]
+                events: [action.event, ...state.events],
             }
 
         case 'TRANSFER_FAIL':
@@ -316,7 +316,7 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
                     isSuccess: true,
                     transactionType: TransactionType.NEW_ORDER,
                 },
-                events: [...state.events, action.event],
+                events: [action.event, ...state.events],
                 allOrders: {
                     ...state.allOrders,
                     data: data

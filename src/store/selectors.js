@@ -10,6 +10,7 @@ const RED = '#F45353';
 // INPUT SELECTORS
 const account = state => state.provider.account;
 const  filledOrders = state => state.exchange.filledOrders.data;
+const events = state => state.exchange.events;
 
 const decorateOrder = (order, tokens) => {
     let token0Amount, token1Amount;
@@ -299,3 +300,14 @@ export const myFilledOrdersSelector = createSelector(
         return orders;
     }
 )
+
+// ----------------------------
+// MY EVENTS
+
+export const myEventsSelector = createSelector(
+    account,
+    events,
+    (account, events) => {
+        return events?.filter(event => event.args.user === account);
+    }
+);

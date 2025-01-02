@@ -1,9 +1,11 @@
 import { useSelector } from 'react-redux';
 import { useRef, useEffect } from 'react';
+import { myEventsSelector } from '../store/selectors';
 
 const Alert = () => {
     const { isPending, isSuccess, isError } = useSelector(state => state.exchange.transaction);
     const { account } = useSelector(state => state.provider);
+    const myEvents = useSelector(myEventsSelector);
 
     const alertRef = useRef();
 
@@ -57,6 +59,7 @@ const Alert = () => {
                             target='_blank'
                             rel='noreferrer'
                         >
+                            {myEvents?.[0].transactionHash}
                         </a>
                     </div>
                 )
