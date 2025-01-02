@@ -80,6 +80,7 @@ const DEFAULT_EXCHANGE_STATE = {
         loaded: false,
         data: []
     },
+    transaction: {}
 };
 
 export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
@@ -197,6 +198,15 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
             }
 
         case 'ORDER_FILL_SUCCESS':
+            // prevent duplicate orders
+            isDuplicateOrder = state.filledOrders.data.find(order => order.id.toString() === action.order.id.toString());
+
+            if (isDuplicateOrder) {
+                data = state.filledOrders.data;
+            } else {
+                data = [...state.filledOrders.data, action.order]
+            }
+            
             return {
                 ...state,
                 transaction: {
@@ -206,10 +216,7 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
                 },
                 filledOrders: {
                     ...state.filledOrders,
-                    data: [
-                        ...state.filledOrders.data,
-                        action.order
-                    ]
+                    data: data
                 },
                 events: [...state.events, action.event],
                 transactionInProgress: false,

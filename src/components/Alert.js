@@ -1,0 +1,69 @@
+import { useSelector } from 'react-redux';
+import { useRef, useEffect } from 'react';
+
+const Alert = () => {
+    const { isPending, isSuccess, isError } = useSelector(state => state.exchange.transaction);
+    const { account } = useSelector(state => state.provider);
+
+    const alertRef = useRef();
+
+    useEffect(() => {
+        if (
+            (
+                isPending ||
+                isError ||
+                isSuccess
+            ) && account
+        ) {
+            alertRef.current.className = 'alert';
+        }
+    }, [isPending, isError, isSuccess, account]);
+
+    const removeHandler = () => (alertRef.current.className = 'alert alert--remove');
+
+    return (
+        <div>
+            {
+                isPending && (
+                    <div 
+                        className="alert alert--remove"
+                        ref={alertRef}
+                        onClick={removeHandler}>
+                        <h1>Transaction Pending...</h1>
+                    </div>
+                )
+            }
+
+            {
+                isError && (
+                    <div 
+                        className="alert alert--remove"
+                        ref={alertRef}
+                        onClick={removeHandler}>
+                        <h1>Transaction Will Fail</h1>
+                    </div>
+                )
+            }
+
+            {
+                isSuccess && (
+                    <div 
+                        className="alert alert--remove"
+                        ref={alertRef}
+                        onClick={removeHandler}>
+                        <h1>Transaction Successful</h1>
+                        <a
+                            href=''
+                            target='_blank'
+                            rel='noreferrer'
+                        >
+                        </a>
+                    </div>
+                )
+            }
+            <div className="alert alert--remove"></div>
+        </div>
+    );
+}
+
+export default Alert;
