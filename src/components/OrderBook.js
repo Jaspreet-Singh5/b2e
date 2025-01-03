@@ -29,7 +29,7 @@ const OrderBook = () => {
                 <h2>Order Book</h2>
             </div>
 
-            <div className="flex">
+            <div className="flex items-start">
                 {
                     orderBook?.[OrderType.SELL]
                     ? (
