@@ -18,7 +18,6 @@ const Alert = () => {
                 isError ||
                 isSuccess
             ) && account
-            && myEvents[0]
         ) {
             alertRef.current.className = 'alert';
         }
