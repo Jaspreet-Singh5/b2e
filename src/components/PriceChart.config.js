@@ -96,4 +96,8 @@ export const series = [
     }
 ]
 
-export const defaultSeries = [];
+export const defaultSeries = [
+    {
+        data: []
+    }
+];
