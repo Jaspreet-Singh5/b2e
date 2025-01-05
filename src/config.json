@@ -1,5 +1,6 @@
 {
     "31337": {
+        "name": "Localhost",
         "exchange": {
             "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
         },
@@ -24,6 +25,7 @@
         "explorerURL": "#"
     },
     "11155111": {
+        "name": "Sepolia",
         "explorerURL": "https://sepolia.etherscan.io",
         "exchange": {
             "address": "0x6cD3cAa4b835b73aa06c8d1a514929FfD0A04B2a"
@@ -43,6 +45,31 @@
             },
             "mUSDT": {
                 "address": "0xA28C8B376168f5f42d3c574a4D4d83698377f87A",
+                "logo": "usdt.svg"
+            }
+        }
+    },
+    "80002": {
+        "name": "Amoy",
+        "explorerURL": "https://amoy.polygonscan.com/",
+        "exchange": {
+            "address": "0x044FeDB6aE3c2220d6090BdF293851fc2931C754"
+        },
+        "tokens": {
+            "BKG": {
+                "address": "0xdE548c936A2e1382143625eD673A059a714a87D6",
+                "logo": "bkg.svg"
+            },
+            "mETH": {
+                "address": "0x8B1A72C8326AE93e4FBb3da86F00113caD0F58f3",
+                "logo": "eth.svg"
+            },
+            "mSOL": {
+                "address": "0x8F075B44B8Af2E79e99c0C2f183fCf5a7CbD530e",
+                "logo": "sol.svg"
+            },
+            "mUSDT": {
+                "address": "0x16f271a4E67b92431943b1a8D1e3A643deb1963a",
                 "logo": "usdt.svg"
             }
         }

@@ -40,8 +40,13 @@ const Navbar = () => {
 					&& (
 						<select name='networks' id='networks' value={config[chainId] ? `0x${chainId.toString(16)}` : '0'} onChange={networkHandler}>
 							<option value='0' disabled>Select network</option>
-							<option value='0x7a69'>Localhost</option>
-							<option value='0xaa36a7'>Sepolia</option>
+							{
+								Object.keys(config).map(chainId => (
+									<option 
+										value={`0x${Number(chainId).toString(16)}`}
+										key={chainId}>{config[chainId].name}</option>
+								))
+							}
 						</select>
 					)
 				}
