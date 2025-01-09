@@ -69,7 +69,7 @@ export const loadTokens = async (addresses, provider, dispatch) => {
 // ---------------------------
 // LOAD USER BALANCES (WALLET & EXCHANGE BALANCES)
 export const loadBalances = async (tokens, exchange, account, dispatch) => {
-    if (!tokens?.length === 2 || !exchange || !account) return;
+    if (tokens?.length !== 2 || !exchange || !account) return;
 
     let balance = await tokens[0].balanceOf(account);
     balance = ethers.utils.formatEther(balance);
