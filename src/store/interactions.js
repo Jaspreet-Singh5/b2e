@@ -103,7 +103,7 @@ export const loadBalances = async (tokens, exchange, account, dispatch) => {
 // -----------------------------------
 // TRANSFER TOKENS (DEPOSIT & WITHDRAWS)
 
-export const transferTokens = async (provider, transferType, token, amount, exchange, dispatch) => {
+export const transferTokens = async (provider, transferType, token, amount, exchange, dispatch, chainId) => {
     let transaction, result;
     let gasEstimate, adjustedGasLimit;
 
@@ -124,17 +124,18 @@ export const transferTokens = async (provider, transferType, token, amount, exch
             try {
                 const { data } = await axios({
                     method: 'get',
-                    url: 'https://gasstation.polygon.technology/amoy'
+                    url: `https://gas.api.infura.io/v3/${process.env.REACT_APP_INFURA_API_KEY}/networks/${chainId}/suggestedGasFees`
                 })
                 maxFeePerGas = ethers.utils.parseUnits(
-                    Math.ceil(data.fast.maxFee) + '',
+                    Math.ceil(data?.['high']?.suggestedMaxFeePerGas) + '',
                     'gwei'
                 )
                 maxPriorityFeePerGas = ethers.utils.parseUnits(
-                    Math.ceil(data.fast.maxPriorityFee) + '',
+                    Math.ceil(data?.['high']?.suggestedMaxPriorityFeePerGas) + '',
                     'gwei'
                 )
-            } catch {
+            } catch (err) {
+                console.error(err);
                 // ignore
             }
 

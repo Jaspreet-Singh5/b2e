@@ -39,11 +39,11 @@ const Balance = () => {
 		e.preventDefault();
 
 		if (token.address === tokens[0].address) {
-		await transferTokens(provider, transferType, token, token1TransferAmount, exchange, dispatch);
-		setToken1TransferAmount(0);
+			await transferTokens(provider, transferType, token, token1TransferAmount, exchange, dispatch, chainId);
+			setToken1TransferAmount(0);
 		} else {
-		await transferTokens(provider, transferType, token, token2TransferAmount, exchange, dispatch);
-		setToken2TransferAmount(0);
+			await transferTokens(provider, transferType, token, token2TransferAmount, exchange, dispatch, chainId);
+			setToken2TransferAmount(0);
 		}
 	}
 
