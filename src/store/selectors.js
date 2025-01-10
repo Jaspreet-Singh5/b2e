@@ -33,7 +33,7 @@ const decorateOrder = (order, tokens) => {
         token0Amount,
         token1Amount,
         tokenPrice,
-        formattedTimestamp: moment.unix(order.timestamp).format('h:mm:ssa d MMM D'),
+        formattedTimestamp: moment.unix(order.timestamp).format('h:mm:ss a, MMM D YYYY'),
     }
 }
 
