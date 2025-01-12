@@ -6,7 +6,7 @@ import { parseTokens } from "../utils/parser";
 import { formatOrder } from "../utils/formatter";
 import axios from "axios";
 
-const GAS_MULTIPLIER = 50; // Multiplier for gas limit (e.g., 1.5 means 50% extra gas)
+const GAS_MULTIPLIER = 5; // Multiplier for gas limit (e.g., 1.5 means 50% extra gas)
 
 export const loadNetwork = async (provider, dispatch) => {
     if (!provider) return;
