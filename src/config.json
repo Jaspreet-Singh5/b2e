@@ -28,23 +28,23 @@
         "name": "Sepolia",
         "explorerURL": "https://sepolia.etherscan.io",
         "exchange": {
-            "address": "0x6cD3cAa4b835b73aa06c8d1a514929FfD0A04B2a"
+            "address": "0x097f7C0C35473D9a786CB6f1B2efAeE5Fe92Bfc6"
         },
         "tokens": {
             "BKG": {
-                "address": "0x6c96a00D3d65f0447828C537F24147C333678e96",
+                "address": "0xc80979ED978983d19389f3cB7D76E68F536dd7F2",
                 "logo": "bkg.svg"
             },
             "mETH": {
-                "address": "0xa4d7f9af4ECCA38f38EA31F51034D3AE736e0c30",
+                "address": "0x635eFDa4fE0E457a0770928B98e203e25AD9D684",
                 "logo": "eth.svg"
             },
             "mSOL": {
-                "address": "0x9d9BC44e7faBde4C3e039CE937Da370e19D16D0A",
+                "address": "0x166238Af8C6E52bE39328c7E17390969dDd03Ddb",
                 "logo": "sol.svg"
             },
             "mUSDT": {
-                "address": "0xA28C8B376168f5f42d3c574a4D4d83698377f87A",
+                "address": "0x5a1E636Ec467F9890bE5D266A69b9583BF205Cfb",
                 "logo": "usdt.svg"
             }
         }
