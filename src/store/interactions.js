@@ -6,8 +6,6 @@ import { parseTokens } from "../utils/parser";
 import { formatOrder } from "../utils/formatter";
 import axios from "axios";
 
-const GAS_MULTIPLIER = 5; // Multiplier for gas limit (e.g., 1.5 means 50% extra gas)
-
 export const loadNetwork = async (provider, dispatch) => {
     if (!provider) return;
 
@@ -105,7 +103,6 @@ export const loadBalances = async (tokens, exchange, account, dispatch) => {
 
 export const transferTokens = async (provider, transferType, token, amount, exchange, dispatch, chainId) => {
     let transaction, result;
-    let gasEstimate, adjustedGasLimit;
 
     dispatch({
         type: 'TRANSFER_REQUEST'
@@ -126,6 +123,7 @@ export const transferTokens = async (provider, transferType, token, amount, exch
                     method: 'get',
                     url: `https://gas.api.infura.io/v3/${process.env.REACT_APP_INFURA_API_KEY}/networks/${chainId}/suggestedGasFees`
                 })
+
                 maxFeePerGas = ethers.utils.parseUnits(
                     Math.ceil(data?.['high']?.suggestedMaxFeePerGas) + '',
                     'gwei'
@@ -136,39 +134,26 @@ export const transferTokens = async (provider, transferType, token, amount, exch
                 )
             } catch (err) {
                 console.error(err);
-                // ignore
             }
-
-            // estimate gas for token approval
-            gasEstimate = await token.connect(signer).estimateGas.approve(exchange.address, amountToTransfer);
-
-            adjustedGasLimit = gasEstimate.mul(GAS_MULTIPLIER * 100).div(100);
 
             // approve tokens
             transaction = await token.connect(signer).approve(exchange.address, amountToTransfer, {
                 maxFeePerGas,
                 maxPriorityFeePerGas,
-                gasLimit: adjustedGasLimit
             });
-            result = transaction.wait();
-
-            // estimate gas
-            gasEstimate = await exchange.connect(signer).estimateGas.depositToken(token.address, amountToTransfer);
-
-            // apply gas multiplier
-            adjustedGasLimit = gasEstimate.mul(GAS_MULTIPLIER * 100).div(100);
+            result = await transaction.wait();
        
             // deposit tokens
             transaction = await exchange.connect(signer).depositToken(token.address, amountToTransfer, {
                 maxFeePerGas,
                 maxPriorityFeePerGas,
-                gasLimit: adjustedGasLimit
+                gasLimit: 250000
             });
-            result = transaction.wait();
+            result = await transaction.wait();
         } else {
             // withdraw tokens
             transaction = await exchange.connect(signer).withdrawToken(token.address, amountToTransfer);
-            result = transaction.wait();
+            result = await transaction.wait();
         }
         
     } catch (err) {
@@ -254,7 +239,7 @@ export const orderTokens = async (provider, exchange, orderType, tokens, amount,
                     tokens[1].address,
                     parseTokens(amount * price)
                 );
-            result = transaction.wait();
+            result = await transaction.wait();
         } else {
             transaction = await exchange
                 .connect(signer)
@@ -264,7 +249,7 @@ export const orderTokens = async (provider, exchange, orderType, tokens, amount,
                     tokens[0].address,
                     parseTokens(amount)
                 );
-            result = transaction.wait();
+            result = await transaction.wait();
         }
     } catch (err) {
         console.error(err);
@@ -332,7 +317,7 @@ export const fillOrder = async (orderId, exchange, provider, dispatch) => {
         const signer = await provider.getSigner();
 
         const transaction = await exchange.connect(signer).fillOrder(orderId);
-        transaction.wait();
+        await transaction.wait();
     } catch (err) {
         console.error(err);
 
