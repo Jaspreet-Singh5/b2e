@@ -126,9 +126,9 @@ contract Exchange {
         require(tokens[_tokenGive][msg.sender] >= _valueGive);
 
         // Instantiate a new order
-        orderCount++;
-        orders[orderCount] = _Order(
-            orderCount, // id
+        uint256 newOrderCount =  ++orderCount;
+        orders[newOrderCount] = _Order(
+            newOrderCount, // id
             msg.sender, // user
             _tokenGet, // address of the token they receive
             _valueGet, // value of the token they receive
@@ -138,7 +138,7 @@ contract Exchange {
         );
 
         emit Order(
-            orderCount, // id
+            newOrderCount, // id
             msg.sender, // user
             _tokenGet, // address of the token they receive
             _valueGet, // value of the token they receive
