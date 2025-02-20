@@ -165,14 +165,14 @@ export const transferTokens = async (provider, transferType, token, amount, exch
 }
 
 export const subscribeToEvents = (exchange, dispatch) => {
-    exchange?.on('Deposit', (token, user, value, balance, event) => {
+    exchange?.on('Deposit', (_token, _user, _value, _balance, event) => {
         dispatch({
             type: 'TRANSFER_SUCCESS',
             event
         })
     });
 
-    exchange?.on('Withdraw', (token, user, value, balance, event) => {
+    exchange?.on('Withdraw', (_token, _user, _value, _balance, event) => {
         dispatch({
             type: 'TRANSFER_SUCCESS',
             event
