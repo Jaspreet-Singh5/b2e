@@ -1,4 +1,3 @@
-import { ethers } from 'ethers';
 import { createContext, useEffect, useState } from 'react'; 
 import { useDispatch } from 'react-redux';
 import config from '../config.json';

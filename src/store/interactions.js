@@ -179,23 +179,23 @@ export const subscribeToEvents = (exchange, dispatch) => {
         })
     });
 
-    exchange?.on('Order', (
-        id,
-        user,
-        tokenGet,
-        valueGet,
-        tokenGive,
-        valueGive,
-        timestamp,
+    exchange?.on("Order", (
+        _id,
+        _user,
+        _tokenGet,
+        _valueGet,
+        _tokenGive,
+        _valueGive,
+        _timestamp,
         event
     ) => {
         const order = formatOrder(event.args);
 
         dispatch({
-            type: 'NEW_ORDER_SUCCESS',
+            type: "NEW_ORDER_SUCCESS",
             order,
-            event
-        })
+            event,
+        });
     });
 
     exchange?.on('Cancel', (...args) => {
