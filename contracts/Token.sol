@@ -39,7 +39,7 @@ contract Token {
     function _transfer(address _from, address _to, uint256 _value) 
         internal
     {
-        require(_to != address(0) || _to != address(this), "Address prohibited");
+        require(_to != address(0) && _to != address(this), "Address prohibited");
         require(balanceOf[_from] >= _value);
 
         // deduct tokens from deployer
