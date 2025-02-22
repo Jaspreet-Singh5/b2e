@@ -23,7 +23,7 @@ module.exports = {
       accounts: privateKeys.split(','),
     },
     amoy: {
-      url: `https://polygon-amoy.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
+      url: `https://polygon-amoy.infura.io/v3/${process.env.INFURA_API_KEY}`,
       accounts: privateKeys.split(','),
     }
   }

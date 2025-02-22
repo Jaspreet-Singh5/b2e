@@ -53,23 +53,23 @@
         "name": "Amoy",
         "explorerURL": "https://amoy.polygonscan.com/",
         "exchange": {
-            "address": "0x044FeDB6aE3c2220d6090BdF293851fc2931C754"
+            "address": "0x22395e3e69806F00Fa85a971746b4bEAeDC4fFa0"
         },
         "tokens": {
             "BKG": {
-                "address": "0xdE548c936A2e1382143625eD673A059a714a87D6",
+                "address": "0x16aBea28B9B63f7BBD8B93ad78D9f0ab6436B84C",
                 "logo": "bkg.svg"
             },
             "mETH": {
-                "address": "0x8B1A72C8326AE93e4FBb3da86F00113caD0F58f3",
+                "address": "0x997dB0753D9a5E6e5E93ad16D05df2C0DBE41F7d",
                 "logo": "eth.svg"
             },
             "mSOL": {
-                "address": "0x8F075B44B8Af2E79e99c0C2f183fCf5a7CbD530e",
+                "address": "0xFaf9fD698160CB25C9130679DdE5C841d4F8dE4e",
                 "logo": "sol.svg"
             },
             "mUSDT": {
-                "address": "0x16f271a4E67b92431943b1a8D1e3A643deb1963a",
+                "address": "0xc00B3C94AfA2a8D79BABDb60ad07d20A4ABba577",
                 "logo": "usdt.svg"
             }
         }
