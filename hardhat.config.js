@@ -2,8 +2,11 @@ require("dotenv").config();
 require("@nomicfoundation/hardhat-ignition-ethers");
 require("@nomicfoundation/hardhat-ignition");
 require("@nomiclabs/hardhat-ethers");
+require("@nomicfoundation/hardhat-verify");
+const { vars } = require("hardhat/config");
 
 const privateKeys = process.env.PRIVATE_KEYS || '';
+const ETHERSCAN_API_KEY = vars.get("ETHERSCAN_API_KEY");
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -25,6 +28,15 @@ module.exports = {
     amoy: {
       url: `https://polygon-amoy.infura.io/v3/${process.env.INFURA_API_KEY}`,
       accounts: privateKeys.split(','),
-    }
-  }
+    },
+  },
+  etherscan: {
+    apiKey: {
+      sepolia: ETHERSCAN_API_KEY,
+      polygonAmoy: process.env.POLYGONSCAN_API_KEY,
+    },
+  },
+  sourcify: {
+    enabled: true,
+  },
 };
