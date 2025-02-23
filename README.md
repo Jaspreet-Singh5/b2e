@@ -1,7 +1,7 @@
 # Try Dapp
 https://enough-rose-miniature.on-fleek.app/
 
-# Try Contracts
+# Checkout Smart Contracts
 
 ## Polygon amoy
 - Token: https://amoy.polygonscan.com//address/0x16aBea28B9B63f7BBD8B93ad78D9f0ab6436B84C#code
