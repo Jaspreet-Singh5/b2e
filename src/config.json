@@ -73,5 +73,30 @@
                 "logo": "usdt.svg"
             }
         }
+    },
+    "24016": {
+        "name": "Avax",
+        "explorerURL": "https://explorer.buildbear.io/parental-nickfury-3bb18f42/",
+        "exchange": {
+            "address": "0x044FeDB6aE3c2220d6090BdF293851fc2931C754"
+        },
+        "tokens": {
+            "BKG": {
+                "address": "0xdE548c936A2e1382143625eD673A059a714a87D6",
+                "logo": "bkg.svg"
+            },
+            "mETH": {
+                "address": "0x8B1A72C8326AE93e4FBb3da86F00113caD0F58f3",
+                "logo": "eth.svg"
+            },
+            "mSOL": {
+                "address": "0x8F075B44B8Af2E79e99c0C2f183fCf5a7CbD530e",
+                "logo": "sol.svg"
+            },
+            "mUSDT": {
+                "address": "0x16f271a4E67b92431943b1a8D1e3A643deb1963a",
+                "logo": "usdt.svg"
+            }
+        }
     }
 }
