@@ -25,7 +25,7 @@
         "explorerURL": "#"
     },
     "11155111": {
-        "name": "Sepolia",
+        "name": "Ethereum Sepolia",
         "explorerURL": "https://sepolia.etherscan.io",
         "exchange": {
             "address": "0x2c1eBc09a1e58e5c7460C5Be5C6AeecB11de8D07"
@@ -50,7 +50,7 @@
         }
     },
     "80002": {
-        "name": "Amoy",
+        "name": "Polygon Amoy",
         "explorerURL": "https://amoy.polygonscan.com/",
         "exchange": {
             "address": "0x22395e3e69806F00Fa85a971746b4bEAeDC4fFa0"
