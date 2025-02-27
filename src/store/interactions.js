@@ -102,7 +102,7 @@ export const loadBalances = async (tokens, exchange, account, dispatch) => {
 // TRANSFER TOKENS (DEPOSIT & WITHDRAWS)
 
 export const transferTokens = async (provider, transferType, token, amount, exchange, dispatch, chainId) => {
-    let transaction, result;
+    let transaction;
 
     dispatch({
         type: 'TRANSFER_REQUEST'
@@ -141,7 +141,7 @@ export const transferTokens = async (provider, transferType, token, amount, exch
                 maxFeePerGas,
                 maxPriorityFeePerGas,
             });
-            result = await transaction.wait();
+            await transaction.wait();
        
             // deposit tokens
             transaction = await exchange.connect(signer).depositToken(token.address, amountToTransfer, {
@@ -149,11 +149,11 @@ export const transferTokens = async (provider, transferType, token, amount, exch
                 maxPriorityFeePerGas,
                 gasLimit: 250000
             });
-            result = await transaction.wait();
+            await transaction.wait();
         } else {
             // withdraw tokens
             transaction = await exchange.connect(signer).withdrawToken(token.address, amountToTransfer);
-            result = await transaction.wait();
+            await transaction.wait();
         }
         
     } catch (err) {
@@ -223,7 +223,7 @@ export const subscribeToEvents = (exchange, dispatch) => {
 
 export const orderTokens = async (provider, exchange, orderType, tokens, amount, price, dispatch) => {
     const signer = await provider.getSigner();
-    let transaction, result;
+    let transaction;
 
     dispatch({
         type: 'NEW_ORDER_REQUEST'
@@ -239,7 +239,7 @@ export const orderTokens = async (provider, exchange, orderType, tokens, amount,
                     tokens[1].address,
                     parseTokens(amount * price)
                 );
-            result = await transaction.wait();
+            await transaction.wait();
         } else {
             transaction = await exchange
                 .connect(signer)
@@ -249,7 +249,7 @@ export const orderTokens = async (provider, exchange, orderType, tokens, amount,
                     tokens[0].address,
                     parseTokens(amount)
                 );
-            result = await transaction.wait();
+            await transaction.wait();
         }
     } catch (err) {
         console.error(err);
