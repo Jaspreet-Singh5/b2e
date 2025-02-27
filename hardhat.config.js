@@ -29,7 +29,7 @@ module.exports = {
       url: `https://polygon-amoy.infura.io/v3/${process.env.INFURA_API_KEY}`,
       accounts: privateKeys.split(','),
     },
-    avax: {
+    avaxBuildbear: {
       url: `https://rpc.buildbear.io/parental-nickfury-3bb18f42`,
       accounts: privateKeys.split(','),
     },
