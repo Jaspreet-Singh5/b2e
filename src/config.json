@@ -72,7 +72,15 @@
                 "address": "0xc00B3C94AfA2a8D79BABDb60ad07d20A4ABba577",
                 "logo": "usdt.svg"
             }
-        }
+        },
+        "nativeCurrency": {
+            "name": "POL",
+            "symbol": "POL",
+            "decimals": 18
+        },
+        "rpcUrls": [
+            "https://rpc-amoy.polygon.technology"
+        ]
     },
     "24016": {
         "name": "Avax Buildbear",
@@ -97,6 +105,14 @@
                 "address": "0x16f271a4E67b92431943b1a8D1e3A643deb1963a",
                 "logo": "usdt.svg"
             }
-        }
+        },
+        "nativeCurrency": {
+            "name": "BBETH",
+            "symbol": "BBETH",
+            "decimals": 18
+        },
+        "rpcUrls": [
+            "https://rpc.buildbear.io/parental-nickfury-3bb18f42"
+        ]
     }
 }
