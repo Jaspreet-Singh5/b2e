@@ -13,12 +13,43 @@ const Navbar = () => {
 	const provider = useWeb3Connection();
 
 	const networkHandler = async (event) => {
-		await window.ethereum.request({
-			method: 'wallet_switchEthereumChain',
-			params: [{
-				chainId: event.target.value
-			}]
-		})
+		let chainId = event.target.value;
+		try {
+			await window.ethereum.request({
+				method: 'wallet_switchEthereumChain',
+				params: [{
+					chainId: chainId,
+				}]
+			});
+		} catch (error) {
+			if (error.code === 4902) {
+				try {
+					let {
+						name,
+						nativeCurrency,
+						rpcUrls,
+						explorerURL
+					} = config[parseInt(chainId, 16)];
+
+					await window.ethereum.request({
+						method: 'wallet_addEthereumChain',
+						params: [{
+							chainId,
+							chainName: name,
+							nativeCurrency,
+							rpcUrls,
+							blockExplorerUrls: [
+								explorerURL,
+							]
+						}]
+					});
+				} catch (addError) {
+					console.error("Failed to add chain:", addError);
+				}
+			}  else {
+				console.error("Error switching chain:", error);
+			}
+		}
 	}
 
 	return(
