@@ -47,7 +47,15 @@
                 "address": "0xD221DDa80C4891d73914DB8Cc4326e2da9204c68",
                 "logo": "usdt.svg"
             }
-        }
+        },
+        "nativeCurrency": {
+            "name": "SepoliaETH",
+            "symbol": "ETH",
+            "decimals": 18
+        },
+        "rpcUrls": [
+            "https://sepolia.drpc.org"
+        ]
     },
     "80002": {
         "name": "Polygon Amoy",
