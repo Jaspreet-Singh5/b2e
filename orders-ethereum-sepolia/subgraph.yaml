@@ -1,0 +1,38 @@
+specVersion: 1.2.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Exchange
+    network: sepolia
+    source:
+      address: "0x2c1eBc09a1e58e5c7460C5Be5C6AeecB11de8D07"
+      abi: Exchange
+      startBlock: 7762447
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.9
+      language: wasm/assemblyscript
+      entities:
+        - Cancel
+        - Deposit
+        - Order
+        - Trade
+        - Withdraw
+      abis:
+        - name: Exchange
+          file: ./abis/Exchange.json
+      eventHandlers:
+        - event: Cancel(uint256,indexed address,indexed address,uint256,indexed address,uint256,uint256)
+          handler: handleCancel
+        - event: Deposit(indexed address,indexed address,uint256,uint256)
+          handler: handleDeposit
+        - event: Order(uint256,indexed address,indexed address,uint256,indexed address,uint256,uint256)
+          handler: handleOrder
+        - event: Trade(uint256,indexed address,indexed address,uint256,indexed address,uint256,address,uint256)
+          handler: handleTrade
+        - event: Withdraw(indexed address,indexed address,uint256,uint256)
+          handler: handleWithdraw
+      file: ./src/exchange.ts

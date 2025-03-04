@@ -6,16 +6,30 @@ export const Web3ConnectionContext = createContext({});
 export const Web3ConnectionProvicer = ({ children }) => {   
     const [ web3Connection, setWeb3Connection ] = useState();
 
-    const loadProvider = () => {
-        // connect ethers to blockchain
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const loadProvider = async () => {
+        try {
+            // login user
+            // await window.ethereum.request({
+            //     method: "eth_requestAccounts",
+            // });
     
-        return provider;
+            // connect ethers to blockchain
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+        
+            return provider;
+        } catch(error) {
+            console.error(error);
+        }
     }
 
     useEffect(() => {
-        setWeb3Connection(loadProvider());
-    }, [ window.ethereum ]);
+        const setConn = async () => {
+            const provider = await loadProvider();
+            setWeb3Connection(provider);
+        }
 
+        setConn();
+        
+    }, []);
     return <Web3ConnectionContext.Provider value={web3Connection}>{children}</Web3ConnectionContext.Provider>   
 }

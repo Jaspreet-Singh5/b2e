@@ -13,7 +13,12 @@ const Navbar = () => {
 	const provider = useWeb3Connection();
 
 	const networkHandler = async (event) => {
+		// 1. check if chain exists
+		// 2. add eth chain
+		// switch eth chain
 		let chainId = event.target.value;
+		console.log(event.target.key);
+
 		try {
 			await window.ethereum.request({
 				method: 'wallet_switchEthereumChain',
