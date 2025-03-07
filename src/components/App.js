@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { loadAccount, loadAllOrders, subscribeToEvents } from '../store/interactions';
+import { loadAccount, subscribeToEvents } from '../store/interactions';
 import { useWeb3Connection } from '../hooks/useWeb3Connection';
 import Navbar from './Navbar';
 import Markets from './Markets';
@@ -12,6 +12,43 @@ import PriceChart from './PriceChart';
 import Trades from './Trades';
 import Transactions from './Transactions';
 import Alert from './Alert';
+import { formatOrder } from '../utils/formatter';
+import { gql, useQuery } from '@apollo/client';
+
+const LOADALLORDERS = gql`
+    query {
+        cancels {
+            id
+            user
+            tokenGet
+            timestamp
+            tokenGive
+            valueGet
+            valueGive
+        }
+
+		trades {
+			id
+			creator
+			timestamp
+			tokenGet
+			tokenGive
+			user
+			valueGet
+			valueGive
+		}
+
+		orders {
+			id
+			timestamp
+			tokenGet
+			tokenGive
+			user
+			valueGet
+			valueGive
+		}
+    }
+`;
 
 function App() {
 	const dispatch = useDispatch();
