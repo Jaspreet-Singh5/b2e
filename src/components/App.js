@@ -55,7 +55,8 @@ function App() {
 	// connect to blockchain
 	const provider = useWeb3Connection();
 	const exchange = useExchangeContract();
-
+	
+	const { loading, error, data } = useQuery(LOADALLORDERS);
 	const loadBlockchainData = async () => {
 		try {
 			// fetch current account and balance when changed
@@ -66,6 +67,29 @@ function App() {
 			console.log(err);
 		}
 	}
+
+	const loadAllOrders = (cancelledOrdersLogs, filledOrdersLogs, allOrderLogs) => {
+		const cancelledOrders = cancelledOrdersLogs.map(cancelledOrdersLog => formatOrder(cancelledOrdersLog));
+	
+		dispatch({
+			type: 'CANCELLED_ORDERS_LOADED',
+			cancelledOrders
+		});
+	
+		const filledOrders = filledOrdersLogs.map(filledOrdersLog => formatOrder(filledOrdersLog));
+	
+		dispatch({
+			type: 'FILLED_ORDERS_LOADED',
+			filledOrders
+		});
+	
+		const allOrders = allOrderLogs.map(orderLog => formatOrder(orderLog));
+		
+		dispatch({
+			type: 'ALL_ORDERS_LOADED',
+			allOrders
+		})
+	}
 	
 	useEffect(() => {
 		window.ethereum.on('chainChanged', () => {
@@ -74,11 +98,18 @@ function App() {
 		
 		loadBlockchainData();
 
-		// Fetch all orders: open, filled, cancelled
-		loadAllOrders(exchange, provider, dispatch);
+		if (data) {
+			const {
+				cancels,
+				orders,
+				trades
+			} = data;
+			// Fetch all orders: open, filled, cancelled
+			loadAllOrders(cancels, trades, orders);
+		}
 
 		subscribeToEvents(exchange, dispatch);
-  	}, [ provider, exchange ]);
+  	}, [ provider, exchange, data ]);
  
   	return (
 		<div>
