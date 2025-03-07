@@ -8,19 +8,27 @@ import store from './store/store';
 import { Web3ConnectionProvicer } from './contexts/web3Connection.context';
 import { TokensContractsProvider } from './contexts/tokensContracts.context';
 import { ExchangeContractProvider } from './contexts/exchangeContract.context';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+
+const client = new ApolloClient({
+  uri: 'https://api.studio.thegraph.com/query/105994/orders-ethereum-sepolia/version/latest',
+  cache: new InMemoryCache(),
+});
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <Web3ConnectionProvicer>
-        <TokensContractsProvider>
-          <ExchangeContractProvider>
-            <App />
-          </ExchangeContractProvider>
-        </TokensContractsProvider>
-      </Web3ConnectionProvicer>
-    </Provider>
+    <ApolloProvider client={client}>
+      <Provider store={store}>
+        <Web3ConnectionProvicer>
+          <TokensContractsProvider>
+            <ExchangeContractProvider>
+              <App />
+            </ExchangeContractProvider>
+          </TokensContractsProvider>
+        </Web3ConnectionProvicer>
+      </Provider>
+    </ApolloProvider>
   </React.StrictMode>
 );
 
