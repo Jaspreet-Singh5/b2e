@@ -17,7 +17,6 @@ const Navbar = () => {
 		// 2. add eth chain
 		// switch eth chain
 		let chainId = event.target.value;
-		console.log(event.target.key);
 
 		try {
 			await window.ethereum.request({
