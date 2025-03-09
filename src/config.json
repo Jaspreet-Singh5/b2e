@@ -54,7 +54,7 @@
             "decimals": 18
         },
         "rpcUrls": [
-            "https://ethereum-sepolia-rpc.publicnode.com"
+            "https://ethereum-sepolia.publicnode.com"
         ]
     },
     "80002": {
