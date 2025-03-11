@@ -13,7 +13,7 @@ const OrderBook = () => {
     const provider = useWeb3Connection();
     
     const { symbols } = useSelector(state => state.tokens);
-    const orderBook = useSelector(state => orderBookSelector(state, tokens));
+    const { data: orderBook, loaded } = useSelector(state => orderBookSelector(state, tokens));
 
     const dispatch = useDispatch();
 
