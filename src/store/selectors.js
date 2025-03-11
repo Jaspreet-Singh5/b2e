@@ -303,10 +303,10 @@ export const myFilledOrdersSelector = createSelector(
         ));
 
         // filter orders by selected token pair
-        data = filterOrdersByTokens(orders.data, tokens);
+        data = filterOrdersByTokens(data, tokens);
 
         // decorate orders - add display attributes
-        data = decorateMyFilledOrders(orders.data, account, tokens);
+        data = decorateMyFilledOrders(data, account, tokens);
         
         // sort by time desc
         data.sort((a, b) => +b.timestamp - +a.timestamp);
