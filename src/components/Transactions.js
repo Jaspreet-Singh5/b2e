@@ -7,13 +7,14 @@ import { useState, useRef } from 'react';
 import { cancelOrder } from '../store/interactions';
 import { useExchangeContract } from '../hooks/useExchangeContract';
 import { useWeb3Connection } from '../hooks/useWeb3Connection';
+import { CircularProgress } from '@mui/material';
 
 const Transactions = () => {
     const [tokens] = useTokensContracts();
     const exchange = useExchangeContract();
     const provider = useWeb3Connection();
 
-    const {data: myOpenOrders} = useSelector(state => myOpenOrdersSelector(state, tokens));
+    const {data: myOpenOrders, loaded: myOpenOrdersLoaded} = useSelector(state => myOpenOrdersSelector(state, tokens));
     const { symbols } = useSelector(state => state.tokens);
     const myFilledOrders = useSelector(state => myFilledOrdersSelector(state, tokens));
 
@@ -66,8 +67,8 @@ const Transactions = () => {
                         </div>
 
                         {
-                            myOpenOrders?.length > 0
-                                ? (
+                            myOpenOrdersLoaded ? (
+                                myOpenOrders?.length > 0 ? (
                                     <table>
                                         <thead>
                                             <tr>
@@ -95,6 +96,11 @@ const Transactions = () => {
                                 ) : (
                                     <Banner>No Open Orders</Banner>
                                 )
+                            ): (
+                                <div className="flex justify-center align-center">
+                                    <CircularProgress sx={{ color: '#2187D0' }} />
+                                </div>
+                            )
                         }
 
                     </div>
