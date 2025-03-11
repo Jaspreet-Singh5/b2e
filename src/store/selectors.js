@@ -60,14 +60,25 @@ const decorateOrderBookOrders = (orders, tokens) => {
 }
 
 const openOrders = state => {
-    const allOrders = state.exchange.allOrders.data;
-    const filledOrders = state.exchange.filledOrders.data;
-    const cancelledOrders = state.exchange.cancelledOrders.data;
+    const allOrders = state.exchange.allOrders;
+    const filledOrders = state.exchange.filledOrders;
+    const cancelledOrders = state.exchange.cancelledOrders;
 
-    return allOrders.filter(order => !(
-        filledOrders.some(filledOrder => filledOrder.id === order.id) ||
-        cancelledOrders.some(cancelledOrder => cancelledOrder.id === order.id)
+    const data = allOrders.data.filter(order => !(
+        filledOrders.data.some(filledOrder => filledOrder.id === order.id) ||
+        cancelledOrders.data.some(cancelledOrder => cancelledOrder.id === order.id)
     ));
+
+    const loaded = (
+        allOrders.loaded &&
+        filledOrders.loaded &&
+        cancelledOrders.loaded
+    )
+
+    return {
+        loaded,
+        data,
+    };
 };
 
 const filterOrdersByTokens = (orders, tokens) => {
@@ -86,21 +97,21 @@ export const orderBookSelector = createSelector([
     openOrders,
     (_, tokens) => tokens
 ], (orders, tokens) => {
-    if (!orders?.length > 0 || !tokens[0] || !tokens[1]) return;
+    if (!(orders.data.length) || !tokens[0] || !tokens[1]) return orders;
     
     // filter orders by selected trading pair
-    orders = filterOrdersByTokens(orders, tokens);
+    orders.data = filterOrdersByTokens(orders.data, tokens);
 
     // decorate orders
-    orders = decorateOrderBookOrders(orders, tokens);
+    orders.data = decorateOrderBookOrders(orders.data, tokens);
 
     // sort orders by token price
-    orders.sort((a, b) => {
+    orders.data.sort((a, b) => {
         return b.tokenPrice - a.tokenPrice;
     });
 
     // group orders by order type
-    orders = Object.groupBy(orders, order => order.orderType);
+    orders.data = Object.groupBy(orders.data, order => order.orderType);
     
     return orders;
 })
@@ -227,19 +238,19 @@ export const myOpenOrdersSelector = createSelector(
     account,
     (_, tokens) => tokens,
     (orders, user, tokens) => {
-        if (!orders?.length > 0 || !tokens[0] || !tokens[1]) return;
+        if (!(orders.data.length) || !tokens[0] || !tokens[1]) return orders;
 
         // filter orders created by current user
-        orders = orders.filter(order => order.user === user);
+        orders.data = orders.data.filter(order => order.user === user);
 
         // filter by selected token pair
-        orders = filterOrdersByTokens(orders, tokens);
+        orders.data = filterOrdersByTokens(orders.data, tokens);
 
         // deocorate orders - add display attributes
-        orders = decorateOrderBookOrders(orders, tokens);
+        orders.data = decorateOrderBookOrders(orders.data, tokens);
 
         // sort by time desc
-        orders.sort((a, b) => +b.timestamp - +a.timestamp);
+        orders.data.sort((a, b) => +b.timestamp - +a.timestamp);
 
         return orders;
     }
