@@ -6,6 +6,8 @@ import { OrderType } from '../enums/orderType';
 import { fillOrder } from '../store/interactions';
 import { useExchangeContract } from '../hooks/useExchangeContract';
 import { useWeb3Connection } from '../hooks/useWeb3Connection';
+import { CircularProgress } from '@mui/material';
+import { Fragment } from 'react';
 
 const OrderBook = () => {
     const [ tokens ] = useTokensContracts();
@@ -31,75 +33,82 @@ const OrderBook = () => {
 
             <div className="flex items-start">
                 {
-                    orderBook?.[OrderType.SELL]
-                    ? (
-                        <table className='exchange__orderbook--sell'>
-                            <caption>Selling</caption>
-                            <thead>
-                                <tr>
-                                    <th>{symbols?.[0]}<img src={sort} alt='Sort' /></th>
-                                    <th>{symbols?.[0]}/{symbols?.[1]}<img src={sort} alt='Sort' /></th>
-                                    <th>{symbols?.[1]}<img src={sort} alt='Sort' /></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                {/* MAPPING OF SELLING ORDERS */}
+                    loaded ? (
+                            <Fragment>
                                 {
-                                    orderBook[OrderType.SELL].map(order => {
-                                        return (
-                                            <tr key={btoa(order.id)}
-                                                onClick={(e) => fillOrderHandler(e, order.id)}>
-                                                <td>{order.token0Amount}</td>
-                                                <td style={{color: order.orderTypeClass}}>{order.tokenPrice}</td>
-                                                <td>{order.token1Amount}</td>
-                                            </tr>
-                                        );
-                                    })
+                                    orderBook?.[OrderType.SELL]
+                                    ? (
+                                        <table className='exchange__orderbook--sell'>
+                                            <caption>Selling</caption>
+                                            <thead>
+                                                <tr>
+                                                    <th>{symbols?.[0]}<img src={sort} alt='Sort' /></th>
+                                                    <th>{symbols?.[0]}/{symbols?.[1]}<img src={sort} alt='Sort' /></th>
+                                                    <th>{symbols?.[1]}<img src={sort} alt='Sort' /></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                
+                                                {/* MAPPING OF SELLING ORDERS */}
+                                                {
+                                                    orderBook[OrderType.SELL].map(order => {
+                                                        return (
+                                                            <tr key={btoa(order.id)}
+                                                                onClick={(e) => fillOrderHandler(e, order.id)}>
+                                                                <td>{order.token0Amount}</td>
+                                                                <td style={{color: order.orderTypeClass}}>{order.tokenPrice}</td>
+                                                                <td>{order.token1Amount}</td>
+                                                            </tr>
+                                                        );
+                                                    })
+                                                }
+                                            </tbody>
+                                        </table>
+                                    )
+                                    : (
+                                        <p className='flex-center'>No Sell Orders</p>
+                                    )
                                 }
-                            </tbody>
-                        </table>
-                    )
-                    : (
-                        <p className='flex-center'>No Sell Orders</p>
-                    )
-                }
 
-
-                <div className='divider'></div>
-
-                {
-                    orderBook?.[OrderType.BUY]
-                    ? (
-                        <table className='exchange__orderbook--buy'>
-                            <caption>Buying</caption>
-                            <thead>
-                                <tr>
-                                    <th>{symbols?.[0]}<img src={sort} alt='Sort' /></th>
-                                    <th>{symbols?.[0]}/{symbols?.[1]}<img src={sort} alt='Sort' /></th>
-                                    <th>{symbols?.[1]}<img src={sort} alt='Sort' /></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
+                                <div className='divider'></div>
+                            
                                 {
-                                    orderBook[OrderType.BUY].map(order => {
-                                        return (
-                                            <tr key={btoa(order.id)}
-                                                onClick={(e) => fillOrderHandler(e, order.id)}
-                                            >
-                                                <td>{order.token0Amount}</td>
-                                                <td style={{color: order.orderTypeClass}}>{order.tokenPrice}</td>
-                                                <td>{order.token1Amount}</td>
-                                            </tr>
-                                        );
-                                    })
+                                    orderBook?.[OrderType.BUY]
+                                    ? (
+                                        <table className='exchange__orderbook--buy'>
+                                            <caption>Buying</caption>
+                                            <thead>
+                                                <tr>
+                                                    <th>{symbols?.[0]}<img src={sort} alt='Sort' /></th>
+                                                    <th>{symbols?.[0]}/{symbols?.[1]}<img src={sort} alt='Sort' /></th>
+                                                    <th>{symbols?.[1]}<img src={sort} alt='Sort' /></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                
+                                                {
+                                                    orderBook[OrderType.BUY].map(order => {
+                                                        return (
+                                                            <tr key={btoa(order.id)}
+                                                                onClick={(e) => fillOrderHandler(e, order.id)}
+                                                            >
+                                                                <td>{order.token0Amount}</td>
+                                                                <td style={{color: order.orderTypeClass}}>{order.tokenPrice}</td>
+                                                                <td>{order.token1Amount}</td>
+                                                            </tr>
+                                                        );
+                                                    })
+                                                }
+                                            </tbody>
+                                        </table>
+                                    )
+                                    : (
+                                        <p className='flex-center'>No Buy Orders</p>
+                                    )
                                 }
-                            </tbody>
-                        </table>
-                    )
-                    : (
-                        <p className='flex-center'>No Buy Orders</p>
+                            </Fragment>
+                    ) : (
+                        <CircularProgress />                        
                     )
                 }
             </div>
