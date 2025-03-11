@@ -209,24 +209,27 @@ const decorateFilledOrders = (orders, tokens) => {
 }
 
 export const filledOrdersSelector = createSelector(
-    state => state.exchange.filledOrders.data,
+    filledOrders,
     (_, tokens) => tokens,
     (orders, tokens) => {
-        if (!orders?.length > 0 || !tokens[0] || !tokens[1]) return;
+        if (!(orders.data.length) || !tokens[0] || !tokens[1]) return orders;
 
         // filter orders by selected tokens pair
-        orders = filterOrdersByTokens(orders, tokens);
+        let data = filterOrdersByTokens(orders.data, tokens);
 
         // sort orders by time asc for price comparison
-        orders.sort((a,b ) => +a.timestamp - +b.timestamp);
+        data.sort((a,b ) => +a.timestamp - +b.timestamp);
 
         // decorate the orders
-        orders = decorateFilledOrders(orders, tokens);
+        data = decorateFilledOrders(data, tokens);
 
         // sort orders by time desc for display
-        orders.sort((a, b) => +b.timestamp - +a.timestamp);
+        data.sort((a, b) => +b.timestamp - +a.timestamp);
 
-        return orders;
+        return {
+            ...orders,
+            data
+        };
     }
 )
 
