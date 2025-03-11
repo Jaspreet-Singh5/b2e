@@ -9,7 +9,7 @@ const RED = '#F45353';
 
 // INPUT SELECTORS
 const account = state => state.provider.account;
-const  filledOrders = state => state.exchange.filledOrders.data;
+const  filledOrders = state => state.exchange.filledOrders;
 const events = state => state.exchange.events;
 
 const decorateOrder = (order, tokens) => {
@@ -291,24 +291,27 @@ export const myFilledOrdersSelector = createSelector(
     (_, tokens) => tokens,
     filledOrders,
     (account, tokens, orders) => {
-        if (!tokens[0] || !tokens[1]) return;
+        if (!tokens[0] || !tokens[1] || !(orders.data.length)) return orders;
 
         // filter orders by current user
-        orders = orders.filter(order => (
+        let data = orders.data.filter(order => (
             order.user === account ||
             order.creator === account
         ));
 
         // filter orders by selected token pair
-        orders = filterOrdersByTokens(orders, tokens);
-
-        // sort by time desc
-        orders.sort((a, b) => +b.timestamp - +a.timestamp);
+        data = filterOrdersByTokens(orders.data, tokens);
 
         // decorate orders - add display attributes
-        orders = decorateMyFilledOrders(orders, account, tokens);
+        data = decorateMyFilledOrders(orders.data, account, tokens);
+        
+        // sort by time desc
+        data.sort((a, b) => +b.timestamp - +a.timestamp);
 
-        return orders;
+        return {
+            ...orders,
+            data
+        };
     }
 )
 
