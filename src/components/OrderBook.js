@@ -7,7 +7,6 @@ import { fillOrder } from '../store/interactions';
 import { useExchangeContract } from '../hooks/useExchangeContract';
 import { useWeb3Connection } from '../hooks/useWeb3Connection';
 import { CircularProgress } from '@mui/material';
-import { Fragment } from 'react';
 
 const OrderBook = () => {
     const [ tokens ] = useTokensContracts();
@@ -31,10 +30,9 @@ const OrderBook = () => {
                 <h2>Order Book</h2>
             </div>
 
-            <div className="flex items-start">
                 {
                     loaded ? (
-                            <Fragment>
+                            <div className="flex items-start">
                                 {
                                     orderBook?.[OrderType.SELL]
                                     ? (
@@ -106,12 +104,13 @@ const OrderBook = () => {
                                         <p className='flex-center'>No Buy Orders</p>
                                     )
                                 }
-                            </Fragment>
+                            </div>
                     ) : (
-                        <CircularProgress />                        
+                        <div className="flex justify-center align-center">
+                            <CircularProgress sx={{ color: '#2187D0' }} />
+                        </div>
                     )
                 }
-            </div>
         </div>
     );
 }
