@@ -16,7 +16,7 @@ const Transactions = () => {
 
     const {data: myOpenOrders, loaded: myOpenOrdersLoaded} = useSelector(state => myOpenOrdersSelector(state, tokens));
     const { symbols } = useSelector(state => state.tokens);
-    const myFilledOrders = useSelector(state => myFilledOrdersSelector(state, tokens));
+    const {data: myFilledOrders, loaded: myFilledOrdersLoaded} = useSelector(state => myFilledOrdersSelector(state, tokens));
 
     const [isShowOrders, setIsShowOrders] = useState(true);
 
@@ -120,32 +120,38 @@ const Transactions = () => {
                                     onClick={tabHandler}>Trades</button>
                             </div>
                         </div>
-
+                    
                         {
-                            myFilledOrders?.length > 0 
-                            ? (
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Time<img src={sort} alt='Sort' /></th>
-                                            <th>{symbols?.[0]}<img src={sort} alt='Sort' /></th>
-                                            <th>{symbols?.[0]}/{symbols?.[1]}<img src={sort} alt='Sort' /></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {
-                                            myFilledOrders?.map(order => (
-                                                <tr key={order.id}>
-                                                    <td>{order.formattedTimestamp}</td>
-                                                    <td style={{ color: order.orderTypeClass }}>{order.orderSign}{order.token0Amount}</td>
-                                                    <td>{order.tokenPrice}</td>
-                                                </tr>
-                                            ))
-                                        }
-                                    </tbody>
-                                </table>
+                            myFilledOrdersLoaded ? (
+                                myFilledOrders?.length > 0 
+                                ? (
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Time<img src={sort} alt='Sort' /></th>
+                                                <th>{symbols?.[0]}<img src={sort} alt='Sort' /></th>
+                                                <th>{symbols?.[0]}/{symbols?.[1]}<img src={sort} alt='Sort' /></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {
+                                                myFilledOrders?.map(order => (
+                                                    <tr key={order.id}>
+                                                        <td>{order.formattedTimestamp}</td>
+                                                        <td style={{ color: order.orderTypeClass }}>{order.orderSign}{order.token0Amount}</td>
+                                                        <td>{order.tokenPrice}</td>
+                                                    </tr>
+                                                ))
+                                            }
+                                        </tbody>
+                                    </table>
+                                ) : (
+                                    <Banner>No Transactions</Banner>
+                                )
                             ) : (
-                                <Banner>No Transactions</Banner>
+                                <div className="flex justify-center align-center">
+                                    <CircularProgress sx={{ color: '#2187D0' }} />
+                                </div>
                             )
                         }
 
