@@ -6,6 +6,7 @@ import Chart from 'react-apexcharts';
 import { defaultSeries, options } from './PriceChart.config';
 import { priceChartSelector } from '../store/selectors';
 import { useTokensContracts } from '../hooks/useTokensContracts';
+import { CircularProgress } from '@mui/material';
 
 const PriceChart = () => {
     const [tokens] = useTokensContracts();
@@ -38,13 +39,19 @@ const PriceChart = () => {
             {
                 account
                     ? (
-                        <Chart
-                            options={options}
-                            type='candlestick'
-                            width='100%'
-                            height='100%'
-                            series={priceChart?.series ?? defaultSeries}
-                        />
+                        priceChart.loaded ? (
+                            <Chart
+                                options={options}
+                                type='candlestick'
+                                width='100%'
+                                height='100%'
+                                series={priceChart?.series ?? defaultSeries}
+                            />
+                        ) : (
+                            <div className="flex justify-center align-center">
+                                <CircularProgress sx={{ color: '#2187D0' }} />
+                            </div>
+                        )
                     ) : (
                         <Banner>
                             Please Connect with MetaMask
