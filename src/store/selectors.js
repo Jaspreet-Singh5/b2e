@@ -150,22 +150,22 @@ const buildGraphData = (orders, interval) => {
 }
 
 export const priceChartSelector = createSelector(
-    state => state.exchange.filledOrders.data,
+    filledOrders,
     (_, tokens) => tokens,
     (orders, tokens) => {
-        if (!orders?.length > 0 || !tokens[0] || !tokens[1]) return;
+        if (!(orders.data.length) || !tokens[0] || !tokens[1]) return orders;
 
         // filter orders by selected trading pair
-        orders = filterOrdersByTokens(orders, tokens);
+        let data = filterOrdersByTokens(orders.data, tokens);
 
         // sort orders by date asc to compare history
-        orders = _.sortBy(orders, order => +order.timestamp);
+        data = _.sortBy(data, order => +order.timestamp);
 
-        // decorate orders - add displat attributes
-        orders = orders.map(order => decorateOrder(order, tokens));
+        // decorate orders - add display attributes
+        data = data.map(order => decorateOrder(order, tokens));
 
         // get last 2 orders for final price and price change
-        const [secondLastOrder, lastOrder] = orders.slice(orders.length -  2);
+        const [secondLastOrder, lastOrder] = data.slice(data.length -  2);
         
         // get last order price
         const lastOrderPrice = lastOrder?.tokenPrice ?? 0;
@@ -174,10 +174,12 @@ export const priceChartSelector = createSelector(
         const secondLastOrderPrice = secondLastOrder?.tokenPrice ?? 0;
 
         return ({
+            ...orders,
+            data,
             lastOrderPrice,
             lastPriceChange: (lastOrderPrice >= secondLastOrderPrice ? '+' : '-'),
             series: [{
-                data: buildGraphData(orders, 'hour')
+                data: buildGraphData(data, 'hour')
             }]
         });
     }
