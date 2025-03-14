@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import sort from '../assets/sort.svg';
-import { orderBookSelector } from '../store/selectors';
+import { myOpenOrdersSelector, orderBookSelector } from '../store/selectors';
 import { useTokensContracts } from '../hooks/useTokensContracts';
 import { OrderType } from '../enums/orderType';
 import { fillOrder } from '../store/interactions';
@@ -15,6 +15,10 @@ const OrderBook = () => {
     
     const { symbols } = useSelector(state => state.tokens);
     const { data: orderBook, loaded } = useSelector(state => orderBookSelector(state, tokens));
+    const {
+        data: myOpenOrders,
+        loaded: myOpenOrdersLoaded,
+    } = useSelector(state => myOpenOrdersSelector(state, tokens));
 
     const dispatch = useDispatch();
 
@@ -24,6 +28,10 @@ const OrderBook = () => {
         await fillOrder(orderId, exchange, provider, dispatch);
     }
 
+    const checkOwnOrder = (order) => {
+        return myOpenOrders.find(myOpenOrder => myOpenOrder.id === order.id);
+    }
+
     return (
         <div className="component exchange__orderbook">
             <div className='component__header flex-between'>
@@ -31,7 +39,7 @@ const OrderBook = () => {
             </div>
 
                 {
-                    loaded ? (
+                    (loaded && myOpenOrdersLoaded) ? (
                             <div className="flex items-start">
                                 {
                                     orderBook?.[OrderType.SELL]
@@ -52,7 +60,8 @@ const OrderBook = () => {
                                                     orderBook[OrderType.SELL].map(order => {
                                                         return (
                                                             <tr key={btoa(order.id)}
-                                                                onClick={(e) => fillOrderHandler(e, order.id)}>
+                                                                onClick={(e) => fillOrderHandler(e, order.id)}
+                                                                className={checkOwnOrder(order) && "disabled"}>
                                                                 <td>{order.token0Amount}</td>
                                                                 <td style={{color: order.orderTypeClass}}>{order.tokenPrice}</td>
                                                                 <td>{order.token1Amount}</td>

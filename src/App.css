@@ -805,3 +805,8 @@ table td {
 		grid-column-end: 5;
 	}
 }
+
+.disabled {
+	pointer-events: none;
+	opacity: .5;
+}
