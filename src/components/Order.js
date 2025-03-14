@@ -79,6 +79,7 @@ const Order = () => {
                 placeholder='0.0000' 
                 onChange={e => setAmount(e.target.value)}
                 value={amount === 0 ? '' : amount}
+                min="0"
             />
   
             <label htmlFor='price'>
@@ -90,6 +91,7 @@ const Order = () => {
                 placeholder='0.0000' 
                 onChange={e => setPrice(e.target.value)}
                 value={price === 0 ? '' : price }
+                min="0"
             />
 
             <hr />

@@ -117,6 +117,7 @@ const Balance = () => {
 				placeholder='0.0000'
 				onChange={(e) => amountHandler(e, tokens[0])}
 				value={token1TransferAmount === 0 ? '' : token1TransferAmount}
+				min="0"
 			/>
 
 			<button className='button' type='submit'>
@@ -159,6 +160,7 @@ const Balance = () => {
 				placeholder='0.0000'
 				onChange={(e) => amountHandler(e, tokens[1])}
 				value={token2TransferAmount === 0 ? '' : token2TransferAmount}
+				min="0"
 			/>
 
 			<button className='button' type='submit'>
