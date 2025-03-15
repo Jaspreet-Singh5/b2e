@@ -76,6 +76,25 @@ const OrderBook = () => {
             dataKey: symbol1,
         },
     ];      
+
+    const fixedHeaderContent = (columns) => {
+        return (
+            <TableRow>
+          {columns.map((column) => (
+              <TableCell
+              key={column.dataKey}
+              variant="head"
+              align={column.numeric || false ? 'right' : 'left'}
+              style={{ width: column.width }}
+              sx={{ backgroundColor: 'background.paper' }}
+              >
+              {column.label}
+            </TableCell>
+          ))}
+        </TableRow>
+      );
+    }
+
     return (
         <div className="component exchange__orderbook">
             <div className='component__header flex-between'>
