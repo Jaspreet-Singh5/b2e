@@ -7,7 +7,10 @@ import { fillOrder } from '../store/interactions';
 import { useExchangeContract } from '../hooks/useExchangeContract';
 import { useWeb3Connection } from '../hooks/useWeb3Connection';
 import { CircularProgress } from '@mui/material';
-import * as React from 'react';
+import { 
+    forwardRef,
+    Fragment
+} from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -56,6 +59,23 @@ const OrderBook = () => {
             [`${symbol1}`]: order.token1Amount,
         }));
     };
+    const columns = (symbol0, symbol1) => [
+        {
+            width: 100,
+            label: symbol0,
+            dataKey: symbol0,
+        },
+        {
+            width: 100,
+            label: `${symbol0}/${symbol1}`,
+            dataKey: `${symbol0}/${symbol1}`,
+        },
+        {
+            width: 100,
+            label: symbol1,
+            dataKey: symbol1,
+        },
+    ];      
     return (
         <div className="component exchange__orderbook">
             <div className='component__header flex-between'>
