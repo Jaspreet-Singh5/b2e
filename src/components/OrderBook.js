@@ -7,6 +7,15 @@ import { fillOrder } from '../store/interactions';
 import { useExchangeContract } from '../hooks/useExchangeContract';
 import { useWeb3Connection } from '../hooks/useWeb3Connection';
 import { CircularProgress } from '@mui/material';
+import * as React from 'react';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { TableVirtuoso } from 'react-virtuoso';
 
 const OrderBook = () => {
     const [ tokens ] = useTokensContracts();
@@ -31,7 +40,22 @@ const OrderBook = () => {
     const checkOwnOrder = (order) => {
         return myOpenOrders.find(myOpenOrder => myOpenOrder.id === order.id);
     }
-
+    
+    const createData = (data, symbol0, symbol1) => {
+        if (
+            !Array.isArray(data) || 
+            data.length === 0 ||
+            !symbol0 ||
+            !symbol1
+        ) return [];
+        
+        return data.map((order, id) => ({
+            id,
+            [`${symbol0}`]: order.token0Amount,
+            [`${symbol0}/${symbol1}`]: order.tokenPrice,
+            [`${symbol1}`]: order.token1Amount,
+        }));
+    };
     return (
         <div className="component exchange__orderbook">
             <div className='component__header flex-between'>
