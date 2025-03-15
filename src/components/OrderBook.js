@@ -95,6 +95,20 @@ const OrderBook = () => {
       );
     }
 
+    function rowContent (_index, row) {
+        return (
+            <Fragment>
+                {columns(symbols?.[0], symbols?.[1]).map((column) => (
+                    <TableCell
+                    key={column.dataKey}
+                    align={column.numeric || false ? 'right' : 'left'}
+                    >
+                    {row[column.dataKey]}
+                    </TableCell>
+                ))}
+            </Fragment>
+      );
+    }
     return (
         <div className="component exchange__orderbook">
             <div className='component__header flex-between'>
