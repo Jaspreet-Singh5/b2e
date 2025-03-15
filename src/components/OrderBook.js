@@ -121,6 +121,7 @@ const OrderBook = () => {
         TableRow,
         TableBody: forwardRef((props, ref) => <TableBody {...props} ref={ref} />),
     };
+    
     return (
         <div className="component exchange__orderbook">
             <div className='component__header flex-between'>
@@ -133,33 +134,24 @@ const OrderBook = () => {
                                 {
                                     orderBook?.[OrderType.SELL]
                                     ? (
-                                        <table className='exchange__orderbook--sell'>
-                                            <caption>Selling</caption>
-                                            <thead>
-                                                <tr>
-                                                    <th>{symbols?.[0]}<img src={sort} alt='Sort' /></th>
-                                                    <th>{symbols?.[0]}/{symbols?.[1]}<img src={sort} alt='Sort' /></th>
-                                                    <th>{symbols?.[1]}<img src={sort} alt='Sort' /></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                
-                                                {/* MAPPING OF SELLING ORDERS */}
-                                                {
-                                                    orderBook[OrderType.SELL].map(order => {
-                                                        return (
-                                                            <tr key={btoa(order.id)}
-                                                                onClick={(e) => fillOrderHandler(e, order.id)}
-                                                                className={checkOwnOrder(order) && "disabled"}>
-                                                                <td>{order.token0Amount}</td>
-                                                                <td style={{color: order.orderTypeClass}}>{order.tokenPrice}</td>
-                                                                <td>{order.token1Amount}</td>
-                                                            </tr>
-                                                        );
-                                                    })
+                                        <Paper style={{ height: 400, width: '100%' }}>
+                                            <TableVirtuoso
+                                                data={createData(
+                                                        orderBook[OrderType.SELL],
+                                                        symbols?.[0],
+                                                        symbols?.[1]
+                                                    )
                                                 }
-                                            </tbody>
-                                        </table>
+                                                components={VirtuosoTableComponents}
+                                                fixedHeaderContent={() => fixedHeaderContent(
+                                                    columns(
+                                                        symbols?.[0],
+                                                        symbols?.[1],
+                                                    )
+                                                )}
+                                            itemContent={rowContent}
+                                            />
+                                       </Paper>
                                     )
                                     : (
                                         <p className='flex-center'>No Sell Orders</p>
