@@ -109,6 +109,18 @@ const OrderBook = () => {
             </Fragment>
       );
     }
+
+    const VirtuosoTableComponents = {
+        Scroller: forwardRef((props, ref) => (
+            <TableContainer component={Paper} {...props} ref={ref} />
+        )),
+        Table: (props) => (
+            <Table {...props} sx={{ borderCollapse: 'separate', tableLayout: 'fixed' }} />
+        ),
+        TableHead: forwardRef((props, ref) => <TableHead {...props} ref={ref} />),
+        TableRow,
+        TableBody: forwardRef((props, ref) => <TableBody {...props} ref={ref} />),
+    };
     return (
         <div className="component exchange__orderbook">
             <div className='component__header flex-between'>
