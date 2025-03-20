@@ -6,19 +6,44 @@ import { OrderType } from '../enums/orderType';
 import { fillOrder } from '../store/interactions';
 import { useExchangeContract } from '../hooks/useExchangeContract';
 import { useWeb3Connection } from '../hooks/useWeb3Connection';
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, styled } from '@mui/material';
 import { 
     forwardRef,
     Fragment
 } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { TableVirtuoso } from 'react-virtuoso';
+
+const StyledTableCell = styled(TableCell)(({
+    theme
+}) => ({
+    [`&.${tableCellClasses.head}`]: {
+        backgroundColor: theme.palette.common.black,
+        color: theme.palette.common.white,
+    },
+    [`&.${
+        tableCellClasses.body}`]: {
+        fontSize: 14,
+    },
+}));
+
+const StyledTableRow = styled(TableRow)(({
+    theme
+}) => ({
+    "&:nth-of-type(odd)": {
+        backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    "&:last-child td, &:last-child th": {
+        border: 0,
+    },
+}));
 
 const OrderBook = () => {
     const [ tokens ] = useTokensContracts();
@@ -77,48 +102,36 @@ const OrderBook = () => {
         },
     ];      
 
-    const fixedHeaderContent = (columns) => {
+    const fixedHeaderContent = columns => {
         return (
             <TableRow>
-          {columns.map((column) => (
-              <TableCell
-              key={column.dataKey}
-              variant="head"
-              align={column.numeric || false ? 'right' : 'left'}
-              style={{ width: column.width }}
-              sx={{ backgroundColor: 'background.paper' }}
-              >
-              {column.label}
-            </TableCell>
-          ))}
-        </TableRow>
-      );
-    }
+                {columns.map(column => (
+                    <StyledTableCell key={column.dataKey} variant="head" align={column.numeric || false ? 'right' : 'left'}>
+                        {column.label}
+                    </StyledTableCell>
+                ))}
+            </TableRow>
+        );
+    };
 
-    function rowContent (_index, row) {
+    function rowContent(_index, row) {
         return (
             <Fragment>
-                {columns(symbols?.[0], symbols?.[1]).map((column) => (
-                    <TableCell
-                    key={column.dataKey}
-                    align={column.numeric || false ? 'right' : 'left'}
-                    >
-                    {row[column.dataKey]}
-                    </TableCell>
+                {columns(symbols?.[0], symbols?.[1]).map(column => (
+                    <StyledTableCell key={column.dataKey} align={column.numeric || false ? 'right' : 'left'}>
+                        {row[column.dataKey]}
+                    </StyledTableCell>
                 ))}
             </Fragment>
-      );
+        );
     }
 
     const VirtuosoTableComponents = {
-        Scroller: forwardRef((props, ref) => (
-            <TableContainer component={Paper} {...props} ref={ref} />
-        )),
-        Table: (props) => (
-            <Table {...props} sx={{ borderCollapse: 'separate', tableLayout: 'fixed' }} />
-        ),
+        Scroller: forwardRef((props, ref) => <TableContainer component={Paper} {...props} ref={ref} />),
+        Table: props => <Table {...props} sx={{ borderCollapse: 'separate', tableLayout: 'fixed' }} />,
         TableHead: forwardRef((props, ref) => <TableHead {...props} ref={ref} />),
-        TableRow,
+        TableRow: forwardRef((props, ref) => <StyledTableRow {...props} ref={ref} />),
+        TableCell: forwardRef((props, ref) => <StyledTableCell {...props} ref={ref} />),
         TableBody: forwardRef((props, ref) => <TableBody {...props} ref={ref} />),
     };
     
