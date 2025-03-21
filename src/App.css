@@ -22,9 +22,9 @@
 
 /* ------------------------------------------------------ */
 
-html {
-	font-family: "DM Sans";
-	color: var(--clr-white);
+* {
+	font-family: "DM Sans"!important;
+	color: var(--clr-white)!important;
 }
 
 main {

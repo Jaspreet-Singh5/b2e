@@ -20,11 +20,8 @@ import { TableVirtuoso } from 'react-virtuoso';
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: '#2187D0',
-        color: '#fff',
     },
     [`&.${tableCellClasses.body}`]: {
-        fontSize: 14,
-        color: '#fff',
     },
     [`&.${tableCellClasses.head}, &.${tableCellClasses.body}`]: {
         display: 'table-cell',
@@ -32,6 +29,8 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    backgroundColor: '#0D121D',
+
     '&:nth-of-type(odd)': {
         backgroundColor: '#121A29',
     },
