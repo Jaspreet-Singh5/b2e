@@ -65,13 +65,6 @@ const OrderBook = () => {
     const createData = (data, symbol0, symbol1) => {
         if (!Array.isArray(data) || data.length === 0 || !symbol0 || !symbol1) return [];
 
-        if (
-            !Array.isArray(data) || 
-            data.length === 0 ||
-            !symbol0 ||
-            !symbol1
-        ) return [];
-        
         return data.map((order, id) => ({
             id,
             [`${symbol0}`]: order.token0Amount,
@@ -79,6 +72,7 @@ const OrderBook = () => {
             [`${symbol1}`]: order.token1Amount,
         }));
     };
+
     const columns = (symbol0, symbol1) => [
         {
             width: 100,
