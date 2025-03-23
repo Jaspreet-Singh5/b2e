@@ -18,27 +18,34 @@ import Paper from '@mui/material/Paper';
 import { TableVirtuoso } from 'react-virtuoso';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    color: "#fff",
-    
+    color: '#fff',
+    border: 0,
+
     [`&.${tableCellClasses.head}`]: {
-        backgroundColor: '#2187D0',
+        backgroundColor: '#121A29',
+        color: '#767F92',        
+        fontSize: '0.85em',
+        fontWeight: 500,
+        
     },
+
     [`&.${tableCellClasses.body}`]: {
+        minWidth: "max-content",
+        fontSize: "clamp(0.90rem, 2vw, 0.95rem)",
+        fontWeight: 400,
     },
+
     [`&.${tableCellClasses.head}, &.${tableCellClasses.body}`]: {
         display: 'table-cell',
     },
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    backgroundColor: '#0D121D',
+    backgroundColor: '#121A29',
 
-    '&:nth-of-type(odd)': {
-        backgroundColor: '#121A29',
-    },
-    // hide last border
-    '&:last-child td, &:last-child th': {
-        border: 0,
+    '&:hover': {
+        background: '#0D121D',
+        cursor: 'pointer',
     },
 }));
 
