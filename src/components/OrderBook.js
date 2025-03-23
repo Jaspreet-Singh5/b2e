@@ -71,6 +71,7 @@ const OrderBook = () => {
             [`${symbol0}`]: order.token0Amount,
             [`${symbol0}/${symbol1}`]: order.tokenPrice,
             [`${symbol1}`]: order.token1Amount,
+            order
         }));
     };
 
@@ -108,7 +109,10 @@ const OrderBook = () => {
         return (
             <Fragment>
                 {columns(symbols?.[0], symbols?.[1]).map(column => (
-                    <StyledTableCell key={column.dataKey} align={column.numeric || false ? 'right' : 'left'}>
+                    <StyledTableCell
+                        key={column.dataKey}
+                        align={column.numeric || false ? 'right' : 'left'}
+                        onClick={e => fillOrderHandler(e, row['order']['id'])}>
                         {row[column.dataKey]}
                     </StyledTableCell>
                 ))}
