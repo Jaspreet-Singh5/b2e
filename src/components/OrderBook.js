@@ -18,6 +18,8 @@ import Paper from '@mui/material/Paper';
 import { TableVirtuoso } from 'react-virtuoso';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    color: "#fff",
+    
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: '#2187D0',
     },

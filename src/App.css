@@ -24,7 +24,10 @@
 
 * {
 	font-family: "DM Sans"!important;
-	color: var(--clr-white)!important;
+}
+
+html {
+	color: var(--clr-white);
 }
 
 main {
