@@ -98,6 +98,7 @@ const OrderBook = () => {
                                                         return (
                                                             <tr key={btoa(order.id)}
                                                                 onClick={(e) => fillOrderHandler(e, order.id)}
+                                                                className={checkOwnOrder(order) && "disabled"}
                                                             >
                                                                 <td>{order.token0Amount}</td>
                                                                 <td style={{color: order.orderTypeClass}}>{order.tokenPrice}</td>
