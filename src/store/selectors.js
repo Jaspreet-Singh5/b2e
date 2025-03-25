@@ -43,9 +43,9 @@ const decorateOrderBookOrder = (order, tokens) => {
     return {
         ...order,
         orderType,
-        orderTypeClass: (orderType === OrderType.BUY ? GREEN : RED),
-        orderFillAction: (orderType === OrderType.BUY ? OrderType.SELL : OrderType.BUY),
-    }
+        orderTypeClass: orderType === OrderType.BUY ? 'green' : 'red',
+        orderFillAction: orderType === OrderType.BUY ? OrderType.SELL : OrderType.BUY,
+    };
 }
 
 const decorateOrderBookOrders = (orders, tokens) => {

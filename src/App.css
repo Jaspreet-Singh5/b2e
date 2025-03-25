@@ -813,3 +813,11 @@ table td {
 	pointer-events: none;
 	opacity: .5;
 }
+
+.green {
+	color: #25CE8F!important;
+}
+
+.red {
+	color: #F45353!important;
+}

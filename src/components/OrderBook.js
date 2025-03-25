@@ -78,7 +78,9 @@ const OrderBook = () => {
             [`${symbol0}`]: order.token0Amount,
             [`${symbol0}/${symbol1}`]: order.tokenPrice,
             [`${symbol1}`]: order.token1Amount,
-            order
+            order,
+            symbol0,
+            symbol1
         }));
     };
 
@@ -119,7 +121,8 @@ const OrderBook = () => {
                     <StyledTableCell
                         key={column.dataKey}
                         align={column.numeric || false ? 'right' : 'left'}
-                        onClick={e => fillOrderHandler(e, row['order']['id'])}>
+                        onClick={e => fillOrderHandler(e, row['order']['id'])}
+                        className={column.dataKey === `${row.symbol0}/${row.symbol1}` && row.order.orderTypeClass}>
                         {row[column.dataKey]}
                     </StyledTableCell>
                 ))}
