@@ -3,9 +3,8 @@ import moment from 'moment';
 import { OrderType } from '../enums/orderType';
 import _ from 'lodash';
 
-
-const GREEN = '#25CE8F';
-const RED = '#F45353';
+const GREEN = "#2ECC71";
+const RED = "#E74C3C";
 
 // INPUT SELECTORS
 const account = state => state.provider.account;
