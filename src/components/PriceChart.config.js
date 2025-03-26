@@ -2,14 +2,14 @@ export const options = {
     chart: {
         animations: { enabled: true },
         toolbar: { show: false },
-        width: '100px'
+        width: '100px',
     },
     tooltip: {
         enabled: true,
         theme: false,
         style: {
             fontSize: '12px',
-            fontFamily: undefined
+            fontFamily: undefined,
         },
         x: {
             show: false,
@@ -18,7 +18,7 @@ export const options = {
         },
         y: {
             show: true,
-            title: 'price'
+            title: 'price',
         },
         marker: {
             show: false,
@@ -35,27 +35,27 @@ export const options = {
     },
     grid: {
         show: true,
-        borderColor: '#767F92',
-        strokeDashArray: 0
+        borderColor: '#2E2E2E',
+        strokeDashArray: 0,
     },
     plotOptions: {
         candlestick: {
             colors: {
-                upward: '#25CE8F',
-                downward: '#F45353'
-            }
-        }
+                upward: '#2ECC71',
+                downward: '#E74C3C',
+            },
+        },
     },
     xaxis: {
         type: 'datetime',
         labels: {
             show: true,
             style: {
-                colors: '#767F92',
+                colors: '#A0A8B8',
                 fontSize: '14px',
                 cssClass: 'apexcharts-xaxis-label',
             },
-        }
+        },
     },
     yaxis: {
         labels: {
@@ -63,16 +63,16 @@ export const options = {
             minWidth: 0,
             maxWidth: 160,
             style: {
-                color: '#F1F2F9',
+                color: '#A0A8B8',
                 fontSize: '14px',
                 cssClass: 'apexcharts-yaxis-label',
             },
             offsetX: 0,
             offsetY: 0,
             rotate: 0,
-        }
-    }
-}
+        },
+    },
+};
 
 // Code in the series as a temporary placeholder for demonstration
 
@@ -81,23 +81,23 @@ export const series = [
         data: [
             [24.01, [6593.34, 6600, 6582.63, 6600]],
             [25.01, [6600, 6604.76, 6590.73, 6593.86]],
-            [26.01, [6593.86, 6625.76, 6590.73, 6620.00]],
-            [27.01, [6620.00, 6604.76, 6590.73, 6605.86]],
+            [26.01, [6593.86, 6625.76, 6590.73, 6620.0]],
+            [27.01, [6620.0, 6604.76, 6590.73, 6605.86]],
             [28.01, [6605.86, 6604.76, 6590.73, 6590.75]],
-            [29.01, [6590.75, 6604.76, 6590.73, 6582.10]],
-            [30.01, [6582.10, 6604.76, 6516.73, 6550.10]],
-            [31.01, [6550.10, 6604.76, 6550.73, 6600.23]],
+            [29.01, [6590.75, 6604.76, 6590.73, 6582.1]],
+            [30.01, [6582.1, 6604.76, 6516.73, 6550.1]],
+            [31.01, [6550.1, 6604.76, 6550.73, 6600.23]],
             [32.01, [6600.23, 6604.76, 6590.73, 6652.89]],
-            [33.01, [6652.89, 6670.00, 6632.89, 6660.89]],
-            [34.01, [6660.89, 6670.00, 6632.89, 6650.89]],
-            [35.01, [6650.89, 6670.00, 6632.89, 6638.89]],
-            [36.01, [6638.89, 6670.00, 6598.89, 6618.89]],
-        ]
-    }
-]
+            [33.01, [6652.89, 6670.0, 6632.89, 6660.89]],
+            [34.01, [6660.89, 6670.0, 6632.89, 6650.89]],
+            [35.01, [6650.89, 6670.0, 6632.89, 6638.89]],
+            [36.01, [6638.89, 6670.0, 6598.89, 6618.89]],
+        ],
+    },
+];
 
 export const defaultSeries = [
     {
-        data: []
-    }
+        data: [],
+    },
 ];

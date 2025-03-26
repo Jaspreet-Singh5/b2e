@@ -814,3 +814,7 @@ table td {
 	pointer-events: none;
 	opacity: .5;
 }
+
+.circular-spinner {
+	color: var(--clr-blue)!important;
+}

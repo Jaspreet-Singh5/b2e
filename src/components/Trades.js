@@ -6,53 +6,56 @@ import Banner from './Banner';
 import { CircularProgress } from '@mui/material';
 
 const Trades = () => {
-    const [ tokens ] = useTokensContracts();
+    const [tokens] = useTokensContracts();
 
-    const {data: filledOrders, loaded: filledOrdersLoaded} = useSelector(state => filledOrdersSelector(state, tokens));
+    const { data: filledOrders, loaded: filledOrdersLoaded } = useSelector(state => filledOrdersSelector(state, tokens));
     const { symbols } = useSelector(state => state.tokens);
 
     return (
         <div className="component exchange__trades">
-            <div className='component__header flex-between'>
+            <div className="component__header flex-between">
                 <h2>Trades</h2>
             </div>
 
-            {
-                filledOrdersLoaded ? (
-                    filledOrders?.length > 0
-                    ? (
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Time<img src={sort} alt='sort' /></th>
-                                    <th>{symbols?.[0]}<img src={sort} alt='sort' /></th>
-                                    <th>{symbols?.[0]}/{symbols?.[1]}<img src={sort} alt='sort' /></th>
+            {filledOrdersLoaded ? (
+                filledOrders?.length > 0 ? (
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    Time
+                                    <img src={sort} alt="sort" />
+                                </th>
+                                <th>
+                                    {symbols?.[0]}
+                                    <img src={sort} alt="sort" />
+                                </th>
+                                <th>
+                                    {symbols?.[0]}/{symbols?.[1]}
+                                    <img src={sort} alt="sort" />
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {filledOrders.map(order => (
+                                <tr key={btoa(order.id)}>
+                                    <td>{order.formattedTimestamp}</td>
+                                    <td>{order.token0Amount}</td>
+                                    <td style={{ color: order.tokenPriceClass }}>{order.tokenPrice}</td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    filledOrders.map(order => (        
-                                        <tr key={btoa(order.id)}>
-                                            <td>{order.formattedTimestamp}</td>
-                                            <td>{order.token0Amount}</td>
-                                            <td style={{color: order.tokenPriceClass}}>{order.tokenPrice}</td>
-                                        </tr>
-                                    ))
-                                }
-                            </tbody>
-                        </table>
-                    ) : (
-                        <Banner>No Transactions</Banner>
-                    )
+                            ))}
+                        </tbody>
+                    </table>
                 ) : (
-                    <div className="flex justify-center align-center">
-                        <CircularProgress sx={{ color: '#2187D0' }} />
-                    </div>
+                    <Banner>No Transactions</Banner>
                 )
-            }
-
+            ) : (
+                <div className="flex justify-center align-center">
+                    <CircularProgress className="circular-spinner" />
+                </div>
+            )}
         </div>
     );
-}
+};
 
 export default Trades;

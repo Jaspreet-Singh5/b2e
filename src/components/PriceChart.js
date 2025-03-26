@@ -49,7 +49,7 @@ const PriceChart = () => {
                             />
                         ) : (
                             <div className="flex justify-center align-center">
-                                <CircularProgress sx={{ color: '#2187D0' }} />
+                                <CircularProgress className="circular-spinner" />
                             </div>
                         )
                     ) : (
