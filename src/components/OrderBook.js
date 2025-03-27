@@ -122,7 +122,10 @@ const OrderBook = () => {
                         key={column.dataKey}
                         align={column.numeric || false ? 'right' : 'left'}
                         onClick={e => fillOrderHandler(e, row['order']['id'])}
-                        className={column.dataKey === `${row.symbol0}/${row.symbol1}` && row.order.orderTypeClass}>
+                        className={`
+                            ${column.dataKey === `${row.symbol0}/${row.symbol1}` && row.order.orderTypeClass}
+                            ${checkOwnOrder(row.order) && 'disabled'}
+                        `}>
                         {row[column.dataKey]}
                     </StyledTableCell>
                 ))}
