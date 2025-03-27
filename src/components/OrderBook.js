@@ -186,7 +186,7 @@ const OrderBook = () => {
                                     return (
                                         <tr key={btoa(order.id)} onClick={e => fillOrderHandler(e, order.id)}>
                                             <td>{order.token0Amount}</td>
-                                            <td style={{ color: order.orderTypeClass }}>{order.tokenPrice}</td>
+                                            <td className={order.orderTypeClass}>{order.tokenPrice}</td>
                                             <td>{order.token1Amount}</td>
                                         </tr>
                                     );

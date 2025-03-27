@@ -81,7 +81,7 @@ const Transactions = () => {
                                             {
                                                 myOpenOrders?.map(order => (
                                                     <tr key={order.id}>
-                                                        <td style={{ color: order.orderTypeClass }}>{order.token0Amount}</td>
+                                                        <td className={order.orderTypeClass}>{order.token0Amount}</td>
                                                         <td>{order.tokenPrice}</td>
                                                         <td>
                                                             <button
