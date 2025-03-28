@@ -827,6 +827,7 @@ table td {
 	color: var(--clr-white)!important;
 }
 
-.MuiPaper-root {
+.MuiContainer-root {
 	background-color: var(--clr-secondary)!important;
+	padding: 0px!important;
 }

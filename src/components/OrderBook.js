@@ -6,7 +6,7 @@ import { OrderType } from '../enums/orderType';
 import { fillOrder } from '../store/interactions';
 import { useExchangeContract } from '../hooks/useExchangeContract';
 import { useWeb3Connection } from '../hooks/useWeb3Connection';
-import { CircularProgress, styled } from '@mui/material';
+import { CircularProgress, Container, styled } from '@mui/material';
 import { forwardRef, Fragment } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -135,7 +135,7 @@ const OrderBook = () => {
     }
 
     const VirtuosoTableComponents = {
-        Scroller: forwardRef((props, ref) => <TableContainer component={Paper} {...props} ref={ref} />),
+        Scroller: forwardRef((props, ref) => <TableContainer component={Container} {...props} ref={ref} />),
         Table: props => <Table {...props} sx={{ borderCollapse: 'separate', tableLayout: 'fixed' }} />,
         TableHead: forwardRef((props, ref) => <TableHead {...props} ref={ref} />),
         TableRow: forwardRef((props, ref) => <StyledTableRow {...props} ref={ref} />),
@@ -152,7 +152,7 @@ const OrderBook = () => {
             {loaded && myOpenOrdersLoaded ? (
                 <div className="flex items-start">
                     {orderBook?.[OrderType.SELL] ? (
-                        <Paper style={{ height: 400, width: '100%' }} className="paper">
+                        <Container style={{ height: 400, width: '100%' }} className="paper">
                             <div>Selling</div>
                             <TableVirtuoso
                                 data={createData(orderBook[OrderType.SELL], symbols?.[0], symbols?.[1])}
@@ -160,7 +160,7 @@ const OrderBook = () => {
                                 fixedHeaderContent={() => fixedHeaderContent(columns(symbols?.[0], symbols?.[1]))}
                                 itemContent={rowContent}
                             />
-                        </Paper>
+                        </Container>
                     ) : (
                         <p className="flex-center">No Sell Orders</p>
                     )}
