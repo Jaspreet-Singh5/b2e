@@ -151,7 +151,8 @@ const OrderBook = () => {
             {loaded && myOpenOrdersLoaded ? (
                 <div className="flex items-start">
                     {orderBook?.[OrderType.SELL] ? (
-                        <Paper style={{ height: 400, width: '100%' }}>
+                        <Paper style={{ height: 400, width: '100%' }} className="paper">
+                            <div>Selling</div>
                             <TableVirtuoso
                                 data={createData(orderBook[OrderType.SELL], symbols?.[0], symbols?.[1])}
                                 components={VirtuosoTableComponents}

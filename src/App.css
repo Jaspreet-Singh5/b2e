@@ -821,3 +821,8 @@ table td {
 .red {
 	color: #F45353!important;
 }
+
+.paper {
+	background-color: var(--clr-secondary)!important;
+	color: var(--clr-white)!important;
+}
