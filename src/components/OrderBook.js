@@ -20,6 +20,7 @@ import { TableVirtuoso } from 'react-virtuoso';
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     color: '#fff',
     border: 0,
+    textAlign: "right",
 
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: '#121A29',
@@ -153,7 +154,7 @@ const OrderBook = () => {
                 <div className="flex items-start">
                     {orderBook?.[OrderType.SELL] ? (
                         <Container style={{ height: 400, width: '100%' }} className="paper">
-                            <div>Selling</div>
+                            <div class="mb-2">Selling</div>
                             <TableVirtuoso
                                 data={createData(orderBook[OrderType.SELL], symbols?.[0], symbols?.[1])}
                                 components={VirtuosoTableComponents}
