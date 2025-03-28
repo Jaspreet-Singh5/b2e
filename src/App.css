@@ -826,3 +826,7 @@ table td {
 	background-color: var(--clr-secondary)!important;
 	color: var(--clr-white)!important;
 }
+
+.MuiPaper-root {
+	background-color: var(--clr-secondary)!important;
+}

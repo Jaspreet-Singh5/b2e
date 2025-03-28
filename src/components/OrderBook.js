@@ -23,16 +23,17 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: '#121A29',
-        color: '#767F92',        
+        color: '#767F92',
         fontSize: '0.85em',
         fontWeight: 500,
-        
+        padding: '0.5em 0',
     },
 
     [`&.${tableCellClasses.body}`]: {
-        minWidth: "max-content",
-        fontSize: "clamp(0.90rem, 2vw, 0.95rem)",
+        minWidth: 'max-content',
+        fontSize: 'clamp(0.90rem, 2vw, 0.95rem)',
         fontWeight: 400,
+        padding: '0.25em 0',
     },
 
     [`&.${tableCellClasses.head}, &.${tableCellClasses.body}`]: {
